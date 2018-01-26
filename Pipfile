@@ -14,6 +14,7 @@ ipdb = "*"
 
 django = "*"
 python-decouple = "*"
+"psycopg2" = "*"
 
 
 [requires]
