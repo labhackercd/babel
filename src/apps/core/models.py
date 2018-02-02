@@ -1,15 +1,12 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.postgres.fields import JSONField
+from apps.core import model_mixings
 
 
 class Channel(models.Model):
-    name = models.CharField(max_length=200, null=True, blank=True)
+    name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
-    means_of_access = models.CharField(max_length=200, null=True, blank=True)
-    manifestation_attrs = JSONField()
-    author_attrs = JSONField()
-    collect_attrs = JSONField()
+    command = models.TextField()
 
     class Meta:
         verbose_name = _('channel')
@@ -19,12 +16,63 @@ class Channel(models.Model):
         return self.name
 
 
+class ProfileDomainAttribute(model_mixings.DomainAttributeMixing):
+    manifestation_type = models.ForeignKey(
+        Channel,
+        on_delete=models.CASCADE,
+        related_name='profile_domain_attrs'
+    )
+
+
+class ManifestationType(models.Model):
+    channel = models.ForeignKey(Channel, on_delete=models.CASCADE,
+                                related_name='manifestation_types')
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = _("Manifestation Type")
+        verbose_name_plural = _("Manifestation Types")
+
+    def __str__(self):
+        return self.name
+
+
+class CollectDomainAttribute(model_mixings.DomainAttributeMixing):
+    manifestation_type = models.ForeignKey(
+        Channel,
+        on_delete=models.CASCADE,
+        related_name='collect_domain_attrs'
+    )
+
+    class Meta:
+        verbose_name = _("Collect Domain Attribute")
+        verbose_name_plural = _("Collect Domain Attributes")
+
+
+class ManifestationDomainAttribute(model_mixings.DomainAttributeMixing):
+    manifestation_type = models.ForeignKey(
+        ManifestationType,
+        on_delete=models.CASCADE,
+        related_name='manifestation_domain_attrs'
+    )
+
+    class Meta:
+        verbose_name = _("Manifestation Domain Attribute")
+        verbose_name_plural = _("Manifestation Domain Attributes")
+
+
 class Collect(models.Model):
+    manifestation_type = models.ForeignKey(
+        Channel,
+        related_name='collects',
+        on_delete=models.CASCADE
+    )
     initial_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
-    channel = models.ForeignKey(Channel, related_name='collects',
-                                on_delete=models.CASCADE)
-    data = JSONField()
+    periodicity = models.IntegerField(
+        default=0,
+        help_text=_('Run script every X seconds')
+    )
 
     class Meta:
         verbose_name = _('collect')
@@ -34,12 +82,21 @@ class Collect(models.Model):
         return '%s <%s>' % (self.attrs, self.channel.name)
 
 
+class CollectAttribute(model_mixings.AttributeMixing):
+    collect = models.ForeignKey(Collect, related_name='attrs',
+                                on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _('collect attribute')
+        verbose_name_plural = _('collect attributes')
+
+
 class Author(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     author_type = models.CharField(max_length=200, null=True, blank=True)
     gender = models.CharField(max_length=200, null=True, blank=True)
     birthdate = models.DateField(null=True, blank=True)
-    CEP = models.IntegerField(null=True, blank=True)
+    cep = models.IntegerField(null=True, blank=True)
 
     class Meta:
         verbose_name = _('author')
@@ -56,7 +113,6 @@ class Profile(models.Model):
     channel = models.ForeignKey(Channel, related_name='profiles',
                                 on_delete=models.CASCADE)
     is_reference = models.BooleanField(default=False)
-    data = JSONField()
 
     class Meta:
         verbose_name = _('profile')
@@ -66,15 +122,26 @@ class Profile(models.Model):
         return '%s <%s>' % (self.author.name, self.channel.name)
 
 
-class Manifestation(models.Model):
-    channel = models.ForeignKey(Channel, related_name='manifestations',
+class ProfileAttribute(model_mixings.AttributeMixing):
+    profile = models.ForeignKey(Profile, related_name='attrs',
                                 on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _('profile attribute')
+        verbose_name_plural = _('profile attributes')
+
+
+class Manifestation(models.Model):
+    manifestation_type = models.ForeignKey(
+        ManifestationType,
+        related_name='manifestations',
+        on_delete=models.CASCADE
+    )
     id_in_channel = models.CharField(max_length=200)
     version = models.IntegerField(default=1)
     content = models.TextField()
     timestamp = models.DateTimeField(null=True, blank=True)
     url = models.CharField(max_length=200, null=True, blank=True)
-    data = JSONField()
     profile = models.ForeignKey(Profile, related_name='manifestations',
                                 on_delete=models.CASCADE)
     collect = models.ManyToManyField(Collect, through='CollectManifestation')
@@ -86,6 +153,15 @@ class Manifestation(models.Model):
 
     def __str__(self):
         return '%s <%s>' % (self.attrs, self.channel.name)
+
+
+class ManifestationAttribute(model_mixings.AttributeMixing):
+    manifestation = models.ForeignKey(Manifestation, related_name='attrs',
+                                      on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _('manifestation attribute')
+        verbose_name_plural = _('manifestation attributes')
 
 
 class CollectManifestation(models.Model):
