@@ -17,7 +17,7 @@ class Channel(models.Model):
 
 
 class ProfileDomainAttribute(model_mixings.DomainAttributeMixing):
-    manifestation_type = models.ForeignKey(
+    channel = models.ForeignKey(
         Channel,
         on_delete=models.CASCADE,
         related_name='profile_domain_attrs'
@@ -38,7 +38,7 @@ class ManifestationType(models.Model):
 
 
 class CollectDomainAttribute(model_mixings.DomainAttributeMixing):
-    manifestation_type = models.ForeignKey(
+    channel = models.ForeignKey(
         Channel,
         on_delete=models.CASCADE,
         related_name='collect_domain_attrs'
@@ -62,7 +62,7 @@ class ManifestationDomainAttribute(model_mixings.DomainAttributeMixing):
 
 
 class Collect(models.Model):
-    manifestation_type = models.ForeignKey(
+    channel = models.ForeignKey(
         Channel,
         related_name='collects',
         on_delete=models.CASCADE
