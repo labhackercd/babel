@@ -17,6 +17,7 @@ python-decouple = "*"
 "psycopg2" = "*"
 djangorestframework = "*"
 django-filter = "*"
+django-nested-admin = "*"
 
 
 [requires]

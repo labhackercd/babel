@@ -23,6 +23,10 @@ class ProfileDomainAttribute(model_mixings.DomainAttributeMixing):
         related_name='profile_domain_attrs'
     )
 
+    class Meta:
+        verbose_name = _("Collect Domain Attribute")
+        verbose_name_plural = _("Collect Domain Attributes")
+
 
 class ManifestationType(models.Model):
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE,
