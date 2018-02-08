@@ -4,7 +4,8 @@ from rest_framework.routers import DefaultRouter
 from apps.core.api import (ChannelViewSet, CollectViewSet, AuthorViewSet,
                            ProfileViewSet, ManifestationViewSet,
                            ManifestationTypeViewSet,
-                           CollectManifestationViewSet)
+                           CollectManifestationViewSet,
+                           RelationshipProfileViewSet)
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r'channels', ChannelViewSet)
@@ -14,6 +15,7 @@ router.register(r'manifestations', ManifestationViewSet)
 router.register(r'collect-manifestations', CollectManifestationViewSet)
 router.register(r'authors', AuthorViewSet)
 router.register(r'profiles', ProfileViewSet)
+router.register(r'relationship-profiles', RelationshipProfileViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

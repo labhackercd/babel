@@ -21,6 +21,13 @@ class ManifestationDomainAttributeSerializer(
         fields = ('id', 'name', 'description', 'is_mandatory')
 
 
+class RelationshipProfileDomainAttributeSerializer(
+        serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.RelationshipProfileDomainAttribute
+        fields = ('id', 'name', 'description', 'is_mandatory')
+
+
 class ManifestationTypeSerializer(serializers.HyperlinkedModelSerializer):
     channel = serializers.HyperlinkedRelatedField(
         read_only=True,
@@ -28,10 +35,13 @@ class ManifestationTypeSerializer(serializers.HyperlinkedModelSerializer):
     )
     manifestation_domain_attrs = ManifestationDomainAttributeSerializer(
         many=True, read_only=True)
+    relationship_profile_domain_attrs = RelationshipProfileDomainAttributeSerializer(
+        many=True, read_only=True)
 
     class Meta:
         model = models.ManifestationType
-        fields = ('id', 'name', 'channel', 'manifestation_domain_attrs')
+        fields = ('id', 'channel', 'name', 'manifestation_domain_attrs',
+                  'relationship_profile_domain_attrs')
 
 
 class ChannelSerializer(serializers.HyperlinkedModelSerializer):
@@ -56,12 +66,15 @@ class CollectAttributeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CollectSerializer(serializers.HyperlinkedModelSerializer):
-    channel = ChannelSerializer()
+    channel = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='channel-detail'
+    )
     attrs = CollectAttributeSerializer(many=True)
 
     class Meta:
         model = models.Collect
-        fields = ('id', 'initial_time', 'end_time', 'periodicity', 'channel',
+        fields = ('id', 'channel', 'initial_time', 'end_time', 'periodicity',
                   'attrs')
 
 
@@ -74,8 +87,8 @@ class AuthorSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Author
-        fields = ('id', 'name', 'author_type', 'gender', 'birthdate', 'cep',
-                  'profiles')
+        fields = ('id', 'profiles', 'name', 'author_type', 'gender',
+                  'birthdate', 'cep')
 
 
 class ProfileAttributeSerializer(serializers.HyperlinkedModelSerializer):
@@ -85,8 +98,14 @@ class ProfileAttributeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
-    author = AuthorSerializer()
-    channel = ChannelSerializer()
+    author = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='author-detail'
+    )
+    channel = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='channel-detail'
+    )
     attrs = ProfileAttributeSerializer(many=True, read_only=True)
 
     class Meta:
@@ -101,21 +120,61 @@ class ManifestationAttributeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ManifestationSerializer(serializers.HyperlinkedModelSerializer):
-    manifestation_type = ManifestationTypeSerializer()
-    profile = ProfileSerializer()
-    collect = CollectSerializer(many=True)
+    manifestation_type = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='manifestationtype-detail'
+    )
+    profile = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='profile-detail'
+    )
+    collect = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        many=True,
+        view_name='collect-detail'
+    )
     attrs = ManifestationAttributeSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Manifestation
-        fields = ('id', 'manifestation_type', 'id_in_channel', 'version',
-                  'content', 'timestamp', 'url', 'profile', 'collect', 'attrs')
+        fields = ('id', 'manifestation_type', 'profile', 'id_in_channel',
+                  'version', 'content', 'timestamp', 'url', 'attrs', 'collect')
 
 
 class CollectManifestationSerializer(serializers.HyperlinkedModelSerializer):
-    manifestation = ManifestationSerializer()
-    collect = CollectSerializer()
+    manifestation = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='manifestation-detail'
+    )
+    collect = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='collect-detail'
+    )
 
     class Meta:
         model = models.CollectManifestation
-        fields = ('id', 'timestamp', 'collect', 'manifestation')
+        fields = ('id', 'collect', 'manifestation', 'timestamp')
+
+
+class RelationshipProfileAttributeSerializer(
+        serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.RelationshipProfileAttribute
+        fields = ('id', 'field', 'value')
+
+
+class RelationshipProfileSerializer(serializers.HyperlinkedModelSerializer):
+    manifestation = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='manifestation-detail'
+    )
+    profile = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='profile-detail'
+    )
+    attrs = RelationshipProfileAttributeSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.RelationshipProfile
+        fields = ('id', 'profile', 'manifestation', 'relationship_type',
+                  'attrs')
