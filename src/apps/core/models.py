@@ -79,7 +79,7 @@ class Collect(models.Model):
         verbose_name_plural = _('collects')
 
     def __str__(self):
-        return '%s <%s>' % (self.attrs, self.channel.name)
+        return '%s <%s>' % (self.data, self.channel.name)
 
 
 class CollectAttribute(model_mixings.AttributeMixing):
@@ -103,7 +103,7 @@ class Author(models.Model):
         verbose_name_plural = _('authors')
 
     def __str__(self):
-        return '%s <%s>' % (self.attrs, self.channel.name)
+        return self.name
 
 
 class Profile(models.Model):
