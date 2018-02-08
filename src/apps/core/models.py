@@ -65,6 +65,18 @@ class ManifestationDomainAttribute(model_mixings.DomainAttributeMixing):
         verbose_name_plural = _("Manifestation Domain Attributes")
 
 
+class RelationshipProfileDomainAttribute(model_mixings.DomainAttributeMixing):
+    manifestation_type = models.ForeignKey(
+        ManifestationType,
+        on_delete=models.CASCADE,
+        related_name='relationship_profile_domain_attrs'
+    )
+
+    class Meta:
+        verbose_name = _("Relationship Profile Domain Attribute")
+        verbose_name_plural = _("Relationship Profile Domain Attributes")
+
+
 class Collect(models.Model):
     channel = models.ForeignKey(
         Channel,
@@ -174,3 +186,30 @@ class CollectManifestation(models.Model):
     collect = models.ForeignKey(Collect, on_delete=models.CASCADE)
     manifestation = models.ForeignKey(Manifestation, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
+
+
+class RelationshipProfile(models.Model):
+    manifestation = models.ForeignKey(Manifestation,
+                                      related_name='relationships',
+                                      on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, related_name='relationships',
+                                on_delete=models.CASCADE)
+    relationship_type = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = _('relationship profile')
+        verbose_name_plural = _('relationship profiles')
+
+    def __str__(self):
+        return '%s <%s>' % (self.manifestation.manifestation_type.name,
+                            self.manifestation.manifestation_type.channel.name)
+
+
+class RelationshipProfileAttribute(model_mixings.AttributeMixing):
+    relationship_profile = models.ForeignKey(RelationshipProfile,
+                                             related_name='attrs',
+                                             on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _('relationship profile attribute')
+        verbose_name_plural = _('relationship profile attributes')
