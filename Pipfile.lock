@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3975f0b7f66f5591aa3e3682b0b9b012be77c45a62d207a98fa8ac3fd3bed020"
+            "sha256": "5fcbcfad1ff7e80ed32eeadd79f9d6114f0c779c1ce2c7acd80e6075b68e0e2a"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -56,6 +56,13 @@
                 "sha256:9f9e94e8d22b100ed3a43cee8c47a7ff7b185e778a1f2da9ec5c73fc4e081b87"
             ],
             "version": "==3.7.7"
+        },
+        "gunicorn": {
+            "hashes": [
+                "sha256:75af03c99389535f218cc596c7de74df4763803f7b63eb09d77e92b3956b36c6",
+                "sha256:eee1169f0ca667be05db3351a0960765620dad53f53434262ff8901b68a1b622"
+            ],
+            "version": "==19.7.1"
         },
         "psycopg2": {
             "hashes": [
@@ -176,7 +183,7 @@
                 "sha256:db3e43032d23787d3e9aec8c7ef1e0d2c3c589d5f303477661ebda2ca6d4bfba",
                 "sha256:d32550b75a818b289bd4c1f96b60c89957811da205afcceab75bc8b4857ea5b3"
             ],
-            "markers": "python_version == '2.7' or python_version == '3.3'",
+            "markers": "python_version in '2.6 2.7 3.2 3.3'",
             "version": "==2.3.0"
         },
         "pexpect": {

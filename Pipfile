@@ -18,6 +18,7 @@ python-decouple = "*"
 djangorestframework = "*"
 django-filter = "*"
 django-nested-admin = "*"
+gunicorn = "*"
 
 
 [requires]
