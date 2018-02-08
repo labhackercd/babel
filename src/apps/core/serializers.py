@@ -14,18 +14,6 @@ class CollectDomainAttributeSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', 'description', 'is_mandatory')
 
 
-class ChannelSerializer(serializers.HyperlinkedModelSerializer):
-    collect_domain_attrs = CollectDomainAttributeSerializer(
-        many=True, read_only=True)
-    profile_domain_attrs = ProfileDomainAttributeSerializer(
-        many=True, read_only=True)
-
-    class Meta:
-        model = models.Channel
-        fields = ('id', 'name', 'description', 'command',
-                  'collect_domain_attrs', 'profile_domain_attrs')
-
-
 class ManifestationDomainAttributeSerializer(
         serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -34,13 +22,31 @@ class ManifestationDomainAttributeSerializer(
 
 
 class ManifestationTypeSerializer(serializers.HyperlinkedModelSerializer):
-    channel = ChannelSerializer()
+    channel = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='channel-detail'
+    )
     manifestation_domain_attrs = ManifestationDomainAttributeSerializer(
         many=True, read_only=True)
 
     class Meta:
         model = models.ManifestationType
         fields = ('id', 'name', 'channel', 'manifestation_domain_attrs')
+
+
+class ChannelSerializer(serializers.HyperlinkedModelSerializer):
+    collect_domain_attrs = CollectDomainAttributeSerializer(
+        many=True, read_only=True)
+    profile_domain_attrs = ProfileDomainAttributeSerializer(
+        many=True, read_only=True)
+    manifestation_types = ManifestationTypeSerializer(
+        many=True, read_only=True)
+
+    class Meta:
+        model = models.Channel
+        fields = ('id', 'name', 'description', 'command',
+                  'collect_domain_attrs', 'profile_domain_attrs',
+                  'manifestation_types')
 
 
 class CollectAttributeSerializer(serializers.HyperlinkedModelSerializer):

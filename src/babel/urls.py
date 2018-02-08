@@ -18,4 +18,5 @@ router.register(r'profiles', ProfileViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
+    path('nested_admin/', include('nested_admin.urls')),
 ]

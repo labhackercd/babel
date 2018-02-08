@@ -23,6 +23,10 @@ class ProfileDomainAttribute(model_mixings.DomainAttributeMixing):
         related_name='profile_domain_attrs'
     )
 
+    class Meta:
+        verbose_name = _("Profile Domain Attribute")
+        verbose_name_plural = _("Profile Domain Attributes")
+
 
 class ManifestationType(models.Model):
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE,
@@ -34,7 +38,7 @@ class ManifestationType(models.Model):
         verbose_name_plural = _("Manifestation Types")
 
     def __str__(self):
-        return self.name
+        return '%s <%s>' % (self.name, self.channel.name)
 
 
 class CollectDomainAttribute(model_mixings.DomainAttributeMixing):
@@ -79,7 +83,7 @@ class Collect(models.Model):
         verbose_name_plural = _('collects')
 
     def __str__(self):
-        return '%s <%s>' % (self.data, self.channel.name)
+        return self.channel.name
 
 
 class CollectAttribute(model_mixings.AttributeMixing):
@@ -152,7 +156,8 @@ class Manifestation(models.Model):
         unique_together = ("id_in_channel", "version")
 
     def __str__(self):
-        return '%s <%s>' % (self.attrs, self.channel.name)
+        return '%s <%s>' % (self.id_in_channel,
+                            self.manifestation_type.channel.name)
 
 
 class ManifestationAttribute(model_mixings.AttributeMixing):

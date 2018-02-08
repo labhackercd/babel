@@ -12,7 +12,6 @@ DATE_LOOKUPS = ['lt', 'lte', 'gt', 'gte']
 
 
 class ChannelViewSet(viewsets.ReadOnlyModelViewSet):
-    lookup_field = 'name'
     queryset = Channel.objects.all()
     serializer_class = ChannelSerializer
     filter_backends = (
@@ -26,7 +25,6 @@ class ChannelViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ManifestationTypeViewSet(viewsets.ReadOnlyModelViewSet):
-    lookup_field = 'name'
     queryset = ManifestationType.objects.all()
     serializer_class = ManifestationTypeSerializer
     filter_backends = (
