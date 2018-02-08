@@ -13,6 +13,11 @@ class CollectDomainAttributeInline(nested_admin.NestedTabularInline):
     extra = 1
 
 
+class RelationshipProfileDomainAttributeInline(nested_admin.NestedTabularInline):
+    model = models.RelationshipProfileDomainAttribute
+    extra = 1
+
+
 class ManifestationDomainAttributeInline(nested_admin.NestedTabularInline):
     model = models.ManifestationDomainAttribute
     extra = 1
@@ -24,6 +29,7 @@ class ManifestationTypeInline(nested_admin.NestedStackedInline):
 
     inlines = [
         ManifestationDomainAttributeInline,
+        RelationshipProfileDomainAttributeInline,
     ]
 
 
@@ -72,8 +78,21 @@ class ManifestationAdmin(nested_admin.NestedModelAdmin):
     ]
 
 
+class RelationshipProfileAttributeInline(nested_admin.NestedStackedInline):
+    model = models.RelationshipProfileAttribute
+    extra = 1
+
+
+class RelationshipProfileAdmin(nested_admin.NestedModelAdmin):
+
+    inlines = [
+        RelationshipProfileAttributeInline,
+    ]
+
+
 admin.site.register(models.Channel, ChannelAdmin)
 admin.site.register(models.Manifestation, ManifestationAdmin)
 admin.site.register(models.Profile, ProfileAdmin)
 admin.site.register(models.Author)
 admin.site.register(models.Collect, CollectAdmin)
+admin.site.register(models.RelationshipProfile, RelationshipProfileAdmin)

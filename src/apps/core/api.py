@@ -1,12 +1,14 @@
 from rest_framework import viewsets, filters
 from django_filters import rest_framework as django_filters, FilterSet
 from apps.core.models import (Channel, Collect, Author, Profile, Manifestation,
-                              ManifestationType, CollectManifestation)
+                              ManifestationType, CollectManifestation,
+                              RelationshipProfile)
 from apps.core.serializers import (ChannelSerializer, CollectSerializer,
                                    AuthorSerializer, ProfileSerializer,
                                    ManifestationSerializer,
                                    ManifestationTypeSerializer,
-                                   CollectManifestationSerializer)
+                                   CollectManifestationSerializer,
+                                   RelationshipProfileSerializer)
 
 DATE_LOOKUPS = ['lt', 'lte', 'gt', 'gte']
 
@@ -172,4 +174,36 @@ class CollectManifestationViewSet(viewsets.ModelViewSet):
                      'collect__channel__name')
     search_fields = ('manifestation__content', 'manifestation__url',
                      'collect__channel__name')
+    ordering_fields = '__all__'
+
+
+class RelationshipProfileFilter(FilterSet):
+    class Meta:
+        model = RelationshipProfile
+        fields = {
+            'profile__id': ['exact'],
+            'profile__author__birthdate': DATE_LOOKUPS,
+            'profile__author__id': ['exact'],
+            'profile__author__name': ['exact', 'contains'],
+            'profile__author__author_type': ['exact'],
+            'profile__author__gender': ['exact'],
+            'profile__author__cep': ['startswith'],
+            'manifestation__id': ['exact'],
+            'manifestation__manifestation_type__channel__id': ['exact'],
+            'manifestation__manifestation_type__channel__name': ['exact', 'contains'],
+            'manifestation__manifestation_type__name': ['exact', 'contains'],
+            'manifestation__manifestation_type__id': ['exact'],
+        }
+
+
+class RelationshipProfileViewSet(viewsets.ModelViewSet):
+    queryset = RelationshipProfile.objects.all()
+    serializer_class = RelationshipProfileSerializer
+    filter_backends = (
+        django_filters.DjangoFilterBackend,
+        filters.OrderingFilter
+    )
+    filter_class = RelationshipProfileFilter
+    search_fields = ('manifestation__content', 'manifestation__url',
+                     'profile__author__name')
     ordering_fields = '__all__'
