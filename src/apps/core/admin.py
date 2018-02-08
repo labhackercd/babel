@@ -36,8 +36,44 @@ class ChannelAdmin(nested_admin.NestedModelAdmin):
     ]
 
 
+class CollectAttributeInline(nested_admin.NestedStackedInline):
+    model = models.CollectAttribute
+    extra = 1
+
+
+class CollectAdmin(nested_admin.NestedModelAdmin):
+
+    inlines = [
+        CollectAttributeInline,
+    ]
+
+
+class ProfileAttributeInline(nested_admin.NestedStackedInline):
+    model = models.ProfileAttribute
+    extra = 1
+
+
+class ProfileAdmin(nested_admin.NestedModelAdmin):
+
+    inlines = [
+        ProfileAttributeInline,
+    ]
+
+
+class ManifestationAttributeInline(nested_admin.NestedStackedInline):
+    model = models.ManifestationAttribute
+    extra = 1
+
+
+class ManifestationAdmin(nested_admin.NestedModelAdmin):
+
+    inlines = [
+        ManifestationAttributeInline,
+    ]
+
+
 admin.site.register(models.Channel, ChannelAdmin)
-admin.site.register(models.Manifestation)
-admin.site.register(models.Profile)
+admin.site.register(models.Manifestation, ManifestationAdmin)
+admin.site.register(models.Profile, ProfileAdmin)
 admin.site.register(models.Author)
-admin.site.register(models.Collect)
+admin.site.register(models.Collect, CollectAdmin)
