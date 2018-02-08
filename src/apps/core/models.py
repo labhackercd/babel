@@ -111,6 +111,7 @@ class Author(models.Model):
 
 
 class Profile(models.Model):
+    id_in_channel = models.CharField(max_length=200)
     url = models.CharField(max_length=200, null=True, blank=True)
     author = models.ForeignKey(Author, related_name='profiles', null=True,
                                blank=True, on_delete=models.CASCADE)
