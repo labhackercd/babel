@@ -22,3 +22,5 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('nested_admin/', include('nested_admin.urls')),
 ]
+
+admin.site.site_header = 'Babel'
