@@ -110,7 +110,8 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Profile
-        fields = ('id', 'author', 'channel', 'url', 'is_reference', 'attrs')
+        fields = ('id', 'author', 'channel', 'url', 'id_in_channel',
+                  'is_reference', 'attrs')
 
 
 class ManifestationAttributeSerializer(serializers.HyperlinkedModelSerializer):
