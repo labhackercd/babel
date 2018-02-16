@@ -172,6 +172,12 @@ class Manifestation(models.Model):
         return '%s <%s>' % (self.id_in_channel,
                             self.manifestation_type.channel.name)
 
+    def clean(self):
+        manifestation = Manifestation.objects.filter(
+            id_in_channel=self.id_in_channel).order_by('-version').first()
+        if self.content != manifestation.content:
+            self.version = manifestation.version + 1
+
 
 class ManifestationAttribute(model_mixings.AttributeMixing):
     manifestation = models.ForeignKey(Manifestation, related_name='attrs',
