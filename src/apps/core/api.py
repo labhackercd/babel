@@ -51,7 +51,7 @@ class CollectFilter(FilterSet):
         }
 
 
-class CollectViewSet(viewsets.ModelViewSet):
+class CollectViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Collect.objects.all()
     serializer_class = CollectSerializer
     filter_backends = (
@@ -103,6 +103,7 @@ class ProfileFilter(FilterSet):
             'channel__id': ['exact'],
             'channel__name': ['exact', 'contains'],
             'id': ['exact'],
+            'id_in_channel': ['exact'],
             'url': ['exact', 'contains'],
             'is_reference': ['exact'],
         }
@@ -162,7 +163,7 @@ class ManifestationViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
 
 
-class CollectManifestationViewSet(viewsets.ModelViewSet):
+class CollectManifestationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CollectManifestation.objects.all()
     serializer_class = CollectManifestationSerializer
     filter_backends = (

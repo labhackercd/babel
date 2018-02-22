@@ -91,10 +91,10 @@ class AuthorSerializer(serializers.HyperlinkedModelSerializer):
                   'birthdate', 'cep')
 
 
-class ProfileAttributeSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileAttributeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProfileAttribute
-        fields = ('id', 'field', 'value')
+        fields = ('field', 'value')
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -102,16 +102,30 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True,
         view_name='author-detail'
     )
+    author_id = serializers.PrimaryKeyRelatedField(
+        queryset=models.Author.objects.all(),
+        write_only=True, source='author')
     channel = serializers.HyperlinkedRelatedField(
         read_only=True,
         view_name='channel-detail'
     )
-    attrs = ProfileAttributeSerializer(many=True, read_only=True)
+    channel_id = serializers.PrimaryKeyRelatedField(
+        queryset=models.Channel.objects.all(),
+        write_only=True, source='channel')
+    attrs = ProfileAttributeSerializer(many=True)
 
     class Meta:
         model = models.Profile
         fields = ('id', 'author', 'channel', 'url', 'id_in_channel',
-                  'is_reference', 'attrs')
+                  'is_reference', 'attrs', 'author_id', 'channel_id')
+
+    def create(self, validated_data):
+        attrs_data = validated_data.pop('attrs')
+        profile = models.Profile.objects.create(**validated_data)
+        for attr in attrs_data:
+            models.ProfileAttribute.objects.create(
+                profile=profile, **attr)
+        return profile
 
 
 class ManifestationAttributeSerializer(serializers.ModelSerializer):
@@ -178,11 +192,10 @@ class CollectManifestationSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'collect', 'manifestation', 'timestamp')
 
 
-class RelationshipProfileAttributeSerializer(
-        serializers.HyperlinkedModelSerializer):
+class RelationshipProfileAttributeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RelationshipProfileAttribute
-        fields = ('id', 'field', 'value')
+        fields = ('field', 'value')
 
 
 class RelationshipProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -190,13 +203,28 @@ class RelationshipProfileSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True,
         view_name='manifestation-detail'
     )
+    manifestation_id = serializers.PrimaryKeyRelatedField(
+        queryset=models.Manifestation.objects.all(),
+        write_only=True, source='manifestation')
     profile = serializers.HyperlinkedRelatedField(
         read_only=True,
         view_name='profile-detail'
     )
-    attrs = RelationshipProfileAttributeSerializer(many=True, read_only=True)
+    profile_id = serializers.PrimaryKeyRelatedField(
+        queryset=models.Profile.objects.all(),
+        write_only=True, source='profile')
+    attrs = RelationshipProfileAttributeSerializer(many=True)
 
     class Meta:
         model = models.RelationshipProfile
         fields = ('id', 'profile', 'manifestation', 'relationship_type',
-                  'attrs')
+                  'attrs', 'manifestation_id', 'profile_id')
+
+    def create(self, validated_data):
+        attrs_data = validated_data.pop('attrs')
+        relationship_profile = models.RelationshipProfile.objects.create(
+            **validated_data)
+        for attr in attrs_data:
+            models.RelationshipProfileAttribute.objects.create(
+                relationship_profile=relationship_profile, **attr)
+        return relationship_profile
