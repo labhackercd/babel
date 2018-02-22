@@ -114,10 +114,10 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
                   'is_reference', 'attrs')
 
 
-class ManifestationAttributeSerializer(serializers.HyperlinkedModelSerializer):
+class ManifestationAttributeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ManifestationAttribute
-        fields = ('id', 'field', 'value')
+        fields = ('field', 'value')
 
 
 class ManifestationSerializer(serializers.HyperlinkedModelSerializer):
@@ -125,21 +125,42 @@ class ManifestationSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True,
         view_name='manifestationtype-detail'
     )
+    manifestation_type_id = serializers.PrimaryKeyRelatedField(
+        queryset=models.ManifestationType.objects.all(),
+        write_only=True, source='manifestation_type')
     profile = serializers.HyperlinkedRelatedField(
         read_only=True,
         view_name='profile-detail'
     )
+    profile_id = serializers.PrimaryKeyRelatedField(
+        queryset=models.Profile.objects.all(),
+        write_only=True, source='profile')
     collect = serializers.HyperlinkedRelatedField(
         read_only=True,
         many=True,
         view_name='collect-detail'
     )
-    attrs = ManifestationAttributeSerializer(many=True, read_only=True)
+    collect_id = serializers.PrimaryKeyRelatedField(
+        queryset=models.Collect.objects.all(),
+        write_only=True, source='collect')
+    attrs = ManifestationAttributeSerializer(many=True)
 
     class Meta:
         model = models.Manifestation
-        fields = ('id', 'manifestation_type', 'profile', 'id_in_channel',
-                  'version', 'content', 'timestamp', 'url', 'attrs', 'collect')
+        fields = ('id', 'id_in_channel', 'manifestation_type', 'profile',
+                  'version', 'content', 'timestamp', 'url', 'attrs', 'collect',
+                  'manifestation_type_id', 'profile_id', 'collect_id')
+
+    def create(self, validated_data):
+        attrs_data = validated_data.pop('attrs')
+        collect = validated_data.pop('collect')
+        manifestation = models.Manifestation.objects.create(**validated_data)
+        for attr in attrs_data:
+            models.ManifestationAttribute.objects.create(
+                manifestation=manifestation, **attr)
+        models.CollectManifestation.objects.create(
+            manifestation=manifestation, collect=collect)
+        return manifestation
 
 
 class CollectManifestationSerializer(serializers.HyperlinkedModelSerializer):
