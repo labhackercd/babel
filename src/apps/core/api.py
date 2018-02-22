@@ -103,6 +103,7 @@ class ProfileFilter(FilterSet):
             'channel__id': ['exact'],
             'channel__name': ['exact', 'contains'],
             'id': ['exact'],
+            'id_in_channel': ['exact'],
             'url': ['exact', 'contains'],
             'is_reference': ['exact'],
         }
