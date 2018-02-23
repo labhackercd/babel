@@ -2,4 +2,7 @@ from django.apps import AppConfig
 
 
 class CoreConfig(AppConfig):
-    name = 'core'
+    name = 'apps.core'
+
+    def ready(self):
+        from apps.core import signals # noqa
