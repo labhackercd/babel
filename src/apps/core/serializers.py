@@ -139,11 +139,14 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         attrs_data = validated_data.pop('attrs')
-        profile = models.Profile.objects.create(**validated_data)
-        for attr in attrs_data:
-            models.ProfileAttribute.objects.create(
-                profile=profile, **attr)
-        return profile
+        domain_attrs = models.ProfileDomainAttribute.objects.filter(
+            channel=validated_data['channel'])
+        if validate_attrs(domain_attrs, attrs_data):
+            profile = models.Profile.objects.create(**validated_data)
+            for attr in attrs_data:
+                models.ProfileAttribute.objects.create(
+                    profile=profile, **attr)
+            return profile
 
 
 class ManifestationAttributeSerializer(serializers.ModelSerializer):
