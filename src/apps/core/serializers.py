@@ -16,7 +16,7 @@ def validate_attrs(domain_attrs, attrs):
     for mandatory_attr in domain_mandatory_list:
         if mandatory_attr not in attrs_keys:
             raise serializers.ValidationError(
-                "%s is required." % mandatory_attr)
+                "Attribute '%s' is required." % mandatory_attr)
     return True
 
 
@@ -189,7 +189,8 @@ class ManifestationSerializer(serializers.HyperlinkedModelSerializer):
         domain_attrs = models.ManifestationDomainAttribute.objects.filter(
             manifestation_type=validated_data['manifestation_type'])
         if validate_attrs(domain_attrs, attrs_data):
-            manifestation = models.Manifestation.objects.create(**validated_data)
+            manifestation = models.Manifestation.objects.create(
+                **validated_data)
             for attr in attrs_data:
                 models.ManifestationAttribute.objects.create(
                     manifestation=manifestation, **attr)
@@ -243,9 +244,12 @@ class RelationshipProfileSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         attrs_data = validated_data.pop('attrs')
-        relationship_profile = models.RelationshipProfile.objects.create(
-            **validated_data)
-        for attr in attrs_data:
-            models.RelationshipProfileAttribute.objects.create(
-                relationship_profile=relationship_profile, **attr)
-        return relationship_profile
+        domain_attrs = models.RelationshipProfileDomainAttribute.objects.filter(
+            manifestation_type=validated_data['manifestation'].manifestation_type)
+        if validate_attrs(domain_attrs, attrs_data):
+            relationship_profile = models.RelationshipProfile.objects.create(
+                **validated_data)
+            for attr in attrs_data:
+                models.RelationshipProfileAttribute.objects.create(
+                    relationship_profile=relationship_profile, **attr)
+            return relationship_profile
