@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class AttributeMixing(models.Model):
     field = models.CharField(max_length=200)
-    value = models.CharField(max_length=200)
+    value = models.TextField()
 
     class Meta:
         verbose_name = _("Attribute Mixing")

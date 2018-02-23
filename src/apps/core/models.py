@@ -156,7 +156,7 @@ class Manifestation(models.Model):
     )
     id_in_channel = models.CharField(max_length=200)
     version = models.IntegerField(default=1)
-    content = models.TextField()
+    content = models.TextField(null=True, blank=True)
     timestamp = models.DateTimeField(null=True, blank=True)
     url = models.CharField(max_length=200, null=True, blank=True)
     profile = models.ForeignKey(Profile, related_name='manifestations',
@@ -171,12 +171,6 @@ class Manifestation(models.Model):
     def __str__(self):
         return '%s <%s>' % (self.id_in_channel,
                             self.manifestation_type.channel.name)
-
-    def clean(self):
-        manifestation = Manifestation.objects.filter(
-            id_in_channel=self.id_in_channel).order_by('-version').first()
-        if self.content != manifestation.content:
-            self.version = manifestation.version + 1
 
 
 class ManifestationAttribute(model_mixings.AttributeMixing):
