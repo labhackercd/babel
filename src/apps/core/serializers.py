@@ -2,6 +2,24 @@ from rest_framework import serializers
 from apps.core import models
 
 
+def validate_attrs(domain_attrs, attrs):
+    domain_list = domain_attrs.values_list('name', flat=True)
+    domain_mandatory_list = domain_attrs.filter(
+        is_mandatory=True).values_list('name', flat=True)
+    attrs_keys = []
+    for odict in attrs:
+        attrs_keys.append(odict['field'])
+    for attr in attrs_keys:
+        if attr not in domain_list:
+            raise serializers.ValidationError(
+                "%s is not a domain attribute." % attr)
+    for mandatory_attr in domain_mandatory_list:
+        if mandatory_attr not in attrs_keys:
+            raise serializers.ValidationError(
+                "%s is required." % mandatory_attr)
+    return True
+
+
 class ProfileDomainAttributeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ProfileDomainAttribute
@@ -168,13 +186,16 @@ class ManifestationSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         attrs_data = validated_data.pop('attrs')
         collect = validated_data.pop('collect')
-        manifestation = models.Manifestation.objects.create(**validated_data)
-        for attr in attrs_data:
-            models.ManifestationAttribute.objects.create(
-                manifestation=manifestation, **attr)
-        models.CollectManifestation.objects.create(
-            manifestation=manifestation, collect=collect)
-        return manifestation
+        domain_attrs = models.ManifestationDomainAttribute.objects.filter(
+            manifestation_type=validated_data['manifestation_type'])
+        if validate_attrs(domain_attrs, attrs_data):
+            manifestation = models.Manifestation.objects.create(**validated_data)
+            for attr in attrs_data:
+                models.ManifestationAttribute.objects.create(
+                    manifestation=manifestation, **attr)
+            models.CollectManifestation.objects.create(
+                manifestation=manifestation, collect=collect)
+            return manifestation
 
 
 class CollectManifestationSerializer(serializers.HyperlinkedModelSerializer):
