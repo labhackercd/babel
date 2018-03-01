@@ -38,7 +38,7 @@ class ManifestationType(models.Model):
         verbose_name_plural = _("Manifestation Types")
 
     def __str__(self):
-        return '%s <%s>' % (self.name, self.channel.name)
+        return '%s <%s> id:%d' % (self.name, self.channel.name, self.id)
 
 
 class CollectDomainAttribute(model_mixings.DomainAttributeMixing):
@@ -166,7 +166,7 @@ class Manifestation(models.Model):
     class Meta:
         verbose_name = _('manifestation')
         verbose_name_plural = _('manifestations')
-        unique_together = ("id_in_channel", "version")
+        unique_together = ("id_in_channel", "version", "manifestation_type")
 
     def __str__(self):
         return '%s <%s>' % (self.id_in_channel,
