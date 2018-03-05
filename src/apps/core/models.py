@@ -59,6 +59,7 @@ class ManifestationDomainAttribute(model_mixings.DomainAttributeMixing):
         on_delete=models.CASCADE,
         related_name='manifestation_domain_attrs'
     )
+    is_versioned = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _("Manifestation Domain Attribute")
@@ -166,7 +167,6 @@ class Manifestation(models.Model):
     class Meta:
         verbose_name = _('manifestation')
         verbose_name_plural = _('manifestations')
-        unique_together = ("id_in_channel", "version", "manifestation_type")
 
     def __str__(self):
         return '%s <%s>' % (self.id_in_channel,
