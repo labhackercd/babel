@@ -186,17 +186,51 @@ class ManifestationSerializer(serializers.HyperlinkedModelSerializer):
                   'version', 'content', 'timestamp', 'url', 'attrs', 'collect',
                   'manifestation_type_id', 'profile_id', 'collect_id')
 
+    def validate(self, attrs):
+        manifestation = models.Manifestation.objects.filter(
+            id_in_channel=attrs['id_in_channel']).order_by('-version').first()
+        attrs['version'] = 1
+        if manifestation:
+            versioned_attrs = models.ManifestationDomainAttribute.objects.filter(
+                manifestation_type=manifestation.manifestation_type,
+                is_versioned=True).values_list('name', flat=True)
+            data_attrs = attrs['attrs']
+            for attr in manifestation.attrs.all():
+                for data_attr in data_attrs:
+                    if (attr.field == data_attr['field'] and
+                            attr.value != data_attr['value']):
+                        if attr.field in versioned_attrs:
+                            attrs['version'] = manifestation.version + 1
+                        else:
+                            attr.value = data_attr['value']
+                            attr.save()
+            if attrs['content'] != manifestation.content:
+                attrs['version'] = manifestation.version + 1
+        return attrs
+
     def create(self, validated_data):
         attrs_data = validated_data.pop('attrs')
         collect = validated_data.pop('collect')
         domain_attrs = models.ManifestationDomainAttribute.objects.filter(
             manifestation_type=validated_data['manifestation_type'])
         if validate_attrs(domain_attrs, attrs_data):
-            manifestation = models.Manifestation.objects.create(
-                **validated_data)
+            manifestation, created = models.Manifestation.objects.get_or_create(
+                id_in_channel=validated_data['id_in_channel'],
+                manifestation_type=validated_data['manifestation_type'],
+                version=validated_data['version'],
+                defaults={
+                    'content': validated_data['content'],
+                    'timestamp': validated_data['timestamp'],
+                    'url': validated_data['url'],
+                    'profile': validated_data['profile']
+                })
             for attr in attrs_data:
-                models.ManifestationAttribute.objects.create(
-                    manifestation=manifestation, **attr)
+                models.ManifestationAttribute.objects.update_or_create(
+                    manifestation=manifestation,
+                    field=attr['field'],
+                    defaults={
+                        'value': attr['value'],
+                    },)
             models.CollectManifestation.objects.create(
                 manifestation=manifestation, collect=collect)
             return manifestation
