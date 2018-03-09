@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from apps.core import model_mixings
+from django.template.defaultfilters import truncatechars
 
 
 class Channel(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(verbose_name=_("channel"), max_length=200)
     description = models.TextField(null=True, blank=True)
     command = models.TextField()
 
@@ -31,7 +32,7 @@ class ProfileDomainAttribute(model_mixings.DomainAttributeMixing):
 class ManifestationType(models.Model):
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE,
                                 related_name='manifestation_types')
-    name = models.CharField(max_length=100)
+    name = models.CharField(verbose_name=_("manifestation type"), max_length=100)
 
     class Meta:
         verbose_name = _("Manifestation Type")
@@ -171,6 +172,10 @@ class Manifestation(models.Model):
     def __str__(self):
         return '%s <%s>' % (self.id_in_channel,
                             self.manifestation_type.channel.name)
+
+    @property
+    def short_content(self):
+        return truncatechars(self.content, 150)
 
 
 class ManifestationAttribute(model_mixings.AttributeMixing):
