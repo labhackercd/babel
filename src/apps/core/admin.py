@@ -77,8 +77,8 @@ class ProfileAttributeInline(nested_admin.NestedStackedInline):
 
 class ProfileAdmin(nested_admin.NestedModelAdmin):
     list_display = ('author', 'id_in_channel', 'url', 'channel', 'is_reference')
-    list_filter = ('author__name', 'author__gender', 'channel__name',
-                   'is_reference')
+    list_filter = ('author__gender', 'channel__name', 'is_reference',
+                   'author__name')
     search_fields = ('id_in_channel', 'url', 'channel__name', 'author__name')
     ordering = ('author__name',)
 
@@ -108,7 +108,7 @@ class ManifestationAdmin(nested_admin.NestedModelAdmin):
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('name', 'profiles', 'author_type', 'gender', 'birthdate',
                     'cep')
-    list_filter = ('gender', 'birthdate')
+    list_filter = ('gender', 'birthdate', 'author_type')
     search_fields = ('name', 'author_type', 'gender', 'cep')
     ordering = ('name',)
 
@@ -136,9 +136,9 @@ class RelationshipProfileAttributeInline(nested_admin.NestedStackedInline):
 
 class RelationshipProfileAdmin(nested_admin.NestedModelAdmin):
     list_display = ('profile', 'manifestation', 'relationship_type')
-    list_filter = ('profile__author__name', 'profile__channel__name',
+    list_filter = ('profile__channel__name',
                    'manifestation__manifestation_type__name',
-                   'relationship_type')
+                   'relationship_type', 'profile__author__name')
     search_fields = ('profile__author__name', 'profile__channel__name',
                      'manifestation__manifestation_type__name')
     ordering = ('profile__author__name',)
