@@ -14,6 +14,17 @@ from apps.core.serializers import (ChannelSerializer, CollectSerializer,
 DATE_LOOKUPS = ['lt', 'lte', 'gt', 'gte']
 
 
+class BabelModelViewSet(viewsets.ModelViewSet):
+
+    def destroy(self, request, *args, **kwargs):
+        if 'pk' not in kwargs.keys():
+            filtered_qs = self.filter_queryset(self.get_queryset())
+            filtered_qs.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return super().destroy(request, *args, **kwargs)
+
+
 class ChannelViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Channel.objects.all()
     serializer_class = ChannelSerializer
@@ -78,7 +89,7 @@ class AuthorFilter(FilterSet):
         }
 
 
-class AuthorViewSet(viewsets.ModelViewSet):
+class AuthorViewSet(BabelModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     filter_backends = (
@@ -110,7 +121,7 @@ class ProfileFilter(FilterSet):
         }
 
 
-class ProfileViewSet(viewsets.ModelViewSet):
+class ProfileViewSet(BabelModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     filter_backends = (
@@ -148,7 +159,7 @@ class ManifestationFilter(FilterSet):
         }
 
 
-class ManifestationViewSet(viewsets.ModelViewSet):
+class ManifestationViewSet(BabelModelViewSet):
     queryset = Manifestation.objects.all()
     serializer_class = ManifestationSerializer
     filter_backends = (
@@ -162,14 +173,6 @@ class ManifestationViewSet(viewsets.ModelViewSet):
                      'profile__author__author_type', 'profile__author__gender',
                      'manifestation_type__name')
     ordering_fields = '__all__'
-
-    def destroy(self, request, *args, **kwargs):
-        if 'pk' not in kwargs.keys():
-            filtered_qs = self.filter_queryset(self.get_queryset())
-            filtered_qs.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            return super().destroy(request, *args, **kwargs)
 
 
 class CollectManifestationViewSet(viewsets.ReadOnlyModelViewSet):
@@ -206,7 +209,7 @@ class RelationshipProfileFilter(FilterSet):
         }
 
 
-class RelationshipProfileViewSet(viewsets.ModelViewSet):
+class RelationshipProfileViewSet(BabelModelViewSet):
     queryset = RelationshipProfile.objects.all()
     serializer_class = RelationshipProfileSerializer
     filter_backends = (
