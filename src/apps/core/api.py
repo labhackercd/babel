@@ -1,4 +1,5 @@
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, status
+from rest_framework.response import Response
 from django_filters import rest_framework as django_filters, FilterSet
 from apps.core.models import (Channel, Collect, Author, Profile, Manifestation,
                               ManifestationType, CollectManifestation,
@@ -161,6 +162,14 @@ class ManifestationViewSet(viewsets.ModelViewSet):
                      'profile__author__author_type', 'profile__author__gender',
                      'manifestation_type__name')
     ordering_fields = '__all__'
+
+    def destroy(self, request, *args, **kwargs):
+        if 'pk' not in kwargs.keys():
+            filtered_qs = self.filter_queryset(self.get_queryset())
+            filtered_qs.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return super().destroy(request, *args, **kwargs)
 
 
 class CollectManifestationViewSet(viewsets.ReadOnlyModelViewSet):
