@@ -1,4 +1,5 @@
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, status
+from rest_framework.response import Response
 from django_filters import rest_framework as django_filters, FilterSet
 from apps.core.models import (Channel, Collect, Author, Profile, Manifestation,
                               ManifestationType, CollectManifestation,
@@ -11,6 +12,17 @@ from apps.core.serializers import (ChannelSerializer, CollectSerializer,
                                    RelationshipProfileSerializer)
 
 DATE_LOOKUPS = ['lt', 'lte', 'gt', 'gte']
+
+
+class BabelModelViewSet(viewsets.ModelViewSet):
+
+    def destroy(self, request, *args, **kwargs):
+        if 'pk' not in kwargs.keys():
+            filtered_qs = self.filter_queryset(self.get_queryset())
+            filtered_qs.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return super().destroy(request, *args, **kwargs)
 
 
 class ChannelViewSet(viewsets.ReadOnlyModelViewSet):
@@ -77,7 +89,7 @@ class AuthorFilter(FilterSet):
         }
 
 
-class AuthorViewSet(viewsets.ModelViewSet):
+class AuthorViewSet(BabelModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     filter_backends = (
@@ -109,7 +121,7 @@ class ProfileFilter(FilterSet):
         }
 
 
-class ProfileViewSet(viewsets.ModelViewSet):
+class ProfileViewSet(BabelModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     filter_backends = (
@@ -147,7 +159,7 @@ class ManifestationFilter(FilterSet):
         }
 
 
-class ManifestationViewSet(viewsets.ModelViewSet):
+class ManifestationViewSet(BabelModelViewSet):
     queryset = Manifestation.objects.all()
     serializer_class = ManifestationSerializer
     filter_backends = (
@@ -197,7 +209,7 @@ class RelationshipProfileFilter(FilterSet):
         }
 
 
-class RelationshipProfileViewSet(viewsets.ModelViewSet):
+class RelationshipProfileViewSet(BabelModelViewSet):
     queryset = RelationshipProfile.objects.all()
     serializer_class = RelationshipProfileSerializer
     filter_backends = (
