@@ -126,7 +126,7 @@ class Author(models.Model):
 
 class Profile(models.Model):
     id_in_channel = models.CharField(max_length=200)
-    url = models.CharField(max_length=200, null=True, blank=True)
+    url = models.TextField(null=True, blank=True)
     author = models.ForeignKey(Author, related_name='profiles', null=True,
                                blank=True, on_delete=models.CASCADE)
     channel = models.ForeignKey(Channel, related_name='profiles',
@@ -160,7 +160,7 @@ class Manifestation(models.Model):
     version = models.IntegerField(default=1)
     content = models.TextField(null=True, blank=True)
     timestamp = models.DateTimeField(null=True, blank=True)
-    url = models.CharField(max_length=200, null=True, blank=True)
+    url = models.TextField(null=True, blank=True)
     profile = models.ForeignKey(Profile, related_name='manifestations',
                                 on_delete=models.CASCADE)
     collect = models.ManyToManyField(Collect, through='CollectManifestation')
