@@ -1,14 +1,14 @@
 from django.urls import path, include
 from django.contrib import admin
-from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
+from apps.core.router import BabelRouter
 from apps.core.api import (ChannelViewSet, CollectViewSet, AuthorViewSet,
                            ProfileViewSet, ManifestationViewSet,
                            ManifestationTypeViewSet,
                            CollectManifestationViewSet,
                            RelationshipProfileViewSet)
 
-router = DefaultRouter(trailing_slash=False)
+router = BabelRouter(trailing_slash=False)
 router.register(r'channels', ChannelViewSet)
 router.register(r'manifestation-types', ManifestationTypeViewSet)
 router.register(r'collects', CollectViewSet)
