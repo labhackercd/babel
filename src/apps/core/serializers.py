@@ -148,6 +148,25 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
                     profile=profile, **attr)
             return profile
 
+    def update(self, instance, validated_data):
+        attrs_data = validated_data.pop('attrs')
+        domain_attrs = models.ProfileDomainAttribute.objects.filter(
+            channel=validated_data['channel'])
+
+        for field in instance._meta.fields:
+            if not field.primary_key:
+                setattr(instance, field.name, validated_data[field.name])
+
+        if validate_attrs(domain_attrs, attrs_data):
+            for attr_data in attrs_data:
+                attr = models.ProfileAttribute.objects.get_or_create(
+                    profile=instance,
+                    field=attr_data['field']
+                )[0]
+                attr.value = attr_data['value']
+                attr.save()
+        return instance
+
 
 class ManifestationAttributeSerializer(serializers.ModelSerializer):
     class Meta:
