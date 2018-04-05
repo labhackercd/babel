@@ -17,6 +17,7 @@ gunicorn = "*"
 django-compressor = "*"
 django-compressor-toolkit = "*"
 django-npm = "*"
+nltk = "*"
 
 [requires]
 python_version = "3.6"
