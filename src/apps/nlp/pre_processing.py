@@ -1,6 +1,9 @@
 from collections import Counter
 import nltk
 
+EXTRA_STOPWORDS = [',', '.', 'srs', 'sr.', 'sra.', 'deputado', 'presidente',
+                   'é', ':', "''", '`', '!', '``', '?', 'nº', 's.a.']
+
 
 def stemmize(token, stem_reference=None):
     token = token.casefold()
@@ -32,9 +35,7 @@ def stemmize_stopwords(stopwords=None):
 
 def bow(text, method='frequency'):
     tokens = tokenize(text)
-    stopwords = stemmize_stopwords(
-        stopwords=[',', '.', 'sr.', 'sra.', 'deputado', 'presidente']
-    )
+    stopwords = stemmize_stopwords(stopwords=EXTRA_STOPWORDS)
     stem_reference = {}
 
     text_bow = Counter([
