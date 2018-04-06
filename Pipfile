@@ -7,7 +7,8 @@ name = "pypi"
 ipdb = "*"
 
 [packages]
-django = "*"
+
+Django = "*"
 python-decouple = "*"
 "psycopg2" = "*"
 djangorestframework = "*"
@@ -18,6 +19,9 @@ django-compressor = "*"
 django-compressor-toolkit = "*"
 django-npm = "*"
 nltk = "*"
+jupyter = "*"
+requests = "*"
+pprint = "*"
 
 [requires]
 python_version = "3.6"
