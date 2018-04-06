@@ -33,7 +33,7 @@ def stemmize_stopwords(stopwords=None):
 def bow(text, method='frequency'):
     tokens = tokenize(text)
     stopwords = stemmize_stopwords(
-        stopwords=[',', '.', 'sr.', 'deputado', 'presidente']
+        stopwords=[',', '.', 'sr.', 'sra.', 'deputado', 'presidente']
     )
     stem_reference = {}
 
@@ -42,3 +42,17 @@ def bow(text, method='frequency'):
         if stemmize(token, stem_reference=stem_reference) not in stopwords
     ])
     return text_bow, stem_reference
+
+
+def most_common_words(text, n=None):
+    text_bow, reference = bow(text)
+    most_common = []
+
+    for token in text_bow.most_common(n):
+        stem, frequency = token
+
+        # reference[stem] is a Counter and most_comon(1) return a list
+        # of tuples: ('word', occurrences)
+        word = reference[stem].most_common(1)[0][0]
+        most_common.append((word, frequency))
+    return most_common
