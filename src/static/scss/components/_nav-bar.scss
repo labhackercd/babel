@@ -1,0 +1,40 @@
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 10vh;
+  padding-right: 8vw;
+  padding-left: 8vw;
+  color: #FFF;
+
+  transition: all .4s linear;
+
+  &.-black {
+    color: #000;
+  }
+
+  & > a {
+    text-decoration: none;
+  }
+
+  & > .brand {
+    font-size: 18px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+  }
+
+  & > .filter {
+    width: 22px;
+    height: 20px;
+    margin-right: -10px;
+    padding: 10px;
+
+    cursor: pointer;
+
+    background-image: url('../img/filter.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}

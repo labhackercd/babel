@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "token": "Legalização da Maconha",
+    "occurrences": 1
+  },
+  {
+    "id": 2,
+    "token": "erivanio",
+    "occurrences": 0.7
+  },
+  {
+    "id": 3,
+    "token": "caio",
+    "occurrences": 0.7
+  },
+  {
+    "id": 4,
+    "token": "pet",
+    "occurrences": 0.7
+  },
+  {
+    "id": 5,
+    "token": "teste",
+    "occurrences": 0.5
+  },
+  {
+    "id": 6,
+    "token": "caio",
+    "occurrences": 0.5
+  },
+  {
+    "id": 7,
+    "token": "pet",
+    "occurrences": 0.5
+  },
+  {
+    "id": 8,
+    "token": "tefascfste",
+    "occurrences": 0.5
+  },
+  {
+    "id": 9,
+    "token": "teswqete",
+    "occurrences": 0.5
+  },
+  {
+    "id": 10,
+    "token": "teverste",
+    "occurrences": 0.5
+  },
+  {
+    "id": 11,
+    "token": "te456hste",
+    "occurrences": 0.5
+  },
+  {
+    "id": 12,
+    "token": "teste",
+    "occurrences": 0.1
+  },
+  {
+    "id": 13,
+    "token": "teste",
+    "occurrences": 0.1
+  },
+  {
+    "id": 14,
+    "token": "teste",
+    "occurrences": 0.1
+  }
+]

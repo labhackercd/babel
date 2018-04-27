@@ -1,0 +1,22 @@
+.ball-animation {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+
+  width: 1px;
+  height: 1px;
+
+  transition: transform cubic-bezier(.55,0,.1,1) .7s;
+  transform: translate(-50%, -50%) scale(0);
+
+  opacity: 0;
+  border-radius: 50%;
+  background-color: #FFF;
+
+  &.-active {
+    transform: translate(-50%, -50%) scale(1200);
+
+    opacity: 1;
+  }
+}

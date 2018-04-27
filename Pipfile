@@ -1,17 +1,12 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [dev-packages]
-
 ipdb = "*"
 
-
 [packages]
-
 django = "*"
 python-decouple = "*"
 "psycopg2" = "*"
@@ -19,8 +14,9 @@ djangorestframework = "*"
 django-filter = "*"
 django-nested-admin = "*"
 gunicorn = "*"
-
+django-compressor = "*"
+django-compressor-toolkit = "*"
+django-npm = "*"
 
 [requires]
-
 python_version = "3.6"
