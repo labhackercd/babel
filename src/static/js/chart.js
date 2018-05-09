@@ -201,7 +201,7 @@ function manifestationPage(manifestationId) {
   })
 }
 
-loadData("/static/babel.json", function(data) {
+loadData("/visualizations/tokens/", function(data) {
   var canvas = drawCanvas('main', 'token');
   var hexagonGroup = createHexagonGroup(canvas, data);
   addHexagons(hexagonGroup, 90);
