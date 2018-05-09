@@ -7,16 +7,22 @@ name = "pypi"
 ipdb = "*"
 
 [packages]
-django = "*"
+
+Django = "*"
 python-decouple = "*"
 "psycopg2" = "*"
-djangorestframework = "*"
+djangorestframework = "==3.7.7"
 django-filter = "*"
 django-nested-admin = "*"
 gunicorn = "*"
 django-compressor = "*"
 django-compressor-toolkit = "*"
 django-npm = "*"
+nltk = "*"
+jupyter = "*"
+requests = "*"
+pprint = "*"
+jsonfield = "*"
 
 [requires]
 python_version = "3.6"

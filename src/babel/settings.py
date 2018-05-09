@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'compressor_toolkit',
 
     'apps.core',
+    'apps.nlp',
+    'apps.visualization',
 ]
 
 MIDDLEWARE = [

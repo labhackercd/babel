@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
     path('nested_admin/', include('nested_admin.urls')),
+    path('visualizations/', include('apps.visualization.urls')),
     path('api-token-auth/', views.obtain_auth_token),
 ]
 
