@@ -3,26 +3,59 @@
   align-items: center;
   justify-content: space-between;
 
-  height: 10vh;
+  height: 80px;
   padding-right: 8vw;
   padding-left: 8vw;
-  color: #FFF;
 
   transition: all .4s linear;
 
-  &.-black {
-    color: #000;
-  }
+  color: #FFF;
 
-  & > a {
+  & a {
     text-decoration: none;
   }
 
-  & > .brand {
-    font-size: 18px;
-    font-weight: bold;
+  & > .info {
+    display: flex;
+    align-items: center;
+  }
+
+  & > .info > .back {
+    width: 22px;
+    height: 20px;
+    margin-left: -10px;
+    padding: 10px;
+
+    cursor: pointer;
+
+    background-image: url('../img/arrow-white.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  & > .info > .breadcrumb {
+    font-size: 16px;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 90%;
 
     text-transform: uppercase;
+  }
+
+  & > .info > .breadcrumb > .brand,
+  & > .info > .breadcrumb > .title {
+    font-weight: bold;
+  }
+
+  & > .info > .breadcrumb > .title {
+    font-size: 4vw;
+  }
+
+  & > .info > .breadcrumb > .title,
+  & > .info > .back {
+    display: none;
   }
 
   & > .filter {
@@ -33,8 +66,30 @@
 
     cursor: pointer;
 
-    background-image: url('../img/filter.svg');
+    background-image: url('../img/filter-white.svg');
     background-repeat: no-repeat;
     background-position: center;
+  }
+
+  &.-negative {
+    color: #000;
+
+    & > .filter {
+      background-image: url('../img/filter-black.svg');
+    }
+
+    & > .info > .breadcrumb > .brand {
+      display: none;
+    }
+
+    & > .info > .breadcrumb > .title {
+      display: block;
+    }
+
+    & > .info > .back {
+      display: block;
+
+      background-image: url('../img/arrow-black.svg');
+    }
   }
 }

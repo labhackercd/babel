@@ -21,6 +21,9 @@
 //   scrollable.attr('transform', `translate(0, ${targetY}) scale(${scale})`);
 // })
 
-$(window).scroll(function(e) {
-  console.log(e);
-})
+// $('main').pressAndHold({
+// 	holdTime: 1000,
+// 	progressIndicatorRemoveDelay: 900,
+// 	progressIndicatorColor: "blue",
+// 	progressIndicatorOpacity: 0.3
+// })

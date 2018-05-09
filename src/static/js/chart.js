@@ -1,21 +1,7 @@
-function loadData(callback) {
+function loadData(url, callback) {
   var newArray = [];
-  $.getJSON('/static/babel.json').done(function(json) {
-    json.forEach(function(element, index) {
-      var previous = newArray[index - 1];
-      var size = 1;
-      if (previous) {
-        size = previous.size * 0.7;
-      }
-      data = {
-        "id": element.id,
-        "token": element.token,
-        "occurrences": element.occurrences,
-        "size": size
-      }
-      newArray.push(data);
-    })
-    callback(newArray);
+  $.getJSON(url).done(function(json) {
+    callback(json);
   })
   return newArray;
 }
@@ -26,6 +12,12 @@ var drawHexagon = d3.svg.line()
   .interpolate("cardinal-closed")
   .tension("0.25");
 
+function addPage(element) {
+  $('main').append(element);
+  $('.js-page').removeClass('-active').addClass('-hidden');
+  element.removeClass('-hidden').addClass('-active');
+}
+
 function zoomInAnimation(element) {
   var bbox = element.getBoundingClientRect();
   var hexPositionTop = bbox.top + bbox.height / 2;
@@ -35,15 +27,17 @@ function zoomInAnimation(element) {
   ball.addClass('-active')
     .css('top', hexPositionTop + 'px')
     .css('left', hexPositionLeft + 'px');
-  ball.on('transitionend', function(){
+  ball.one('animationend', function(){
     $('.ball-animation').removeClass('-active');
     $('body').addClass('-invertedbg');
+    $('.nav-bar').addClass('-negative');
   });
 }
 
 function drawCanvas(selector, chartName) {
   return d3.select(selector)
     .append("svg")
+    .classed('js-page', true)
     .classed("js-svg-root", true)
     .classed('-active', true)
     .attr("width", "100%")
@@ -141,32 +135,83 @@ function showHexagonGroup(hexagonGroup) {
 }
 
 
-function authorsChart(authorId) {
-  loadData(function(data) {
-    console.log(data);
+function tokensChart(tokenId) {
+  loadData('/static/babel.json', function(data) {
     var canvas = drawCanvas('main','authors');
     var hexagonGroup = createHexagonGroup(canvas, data);
     addHexagons(hexagonGroup, 90);
     positionHexagon(hexagonGroup);
     addText(hexagonGroup);
-    $('.ball-animation').on('transitionend', function() {
+    $('.ball-animation').on('animationend', function() {
       showHexagonGroup(hexagonGroup);
+    })
+    hexagonOnClick(hexagonGroup, function(data) {
+      $('.ball-animation').addClass('-invertedbg');
+      $('.ball-animation').one('animationend', function(){
+        $('body').removeClass('-invertedbg');
+        $('.nav-bar').removeClass('-negative');
+
+        authorsChart(data.id);
+      });
     })
   })
 }
 
-loadData(function(data) {
+function authorsChart(authorId) {
+  loadData("/static/authors.json", function(data) {
+    var speechesPage = $(document.createElement('div'))
+    speechesPage.addClass('speeches js-page');
+    addPage(speechesPage);
+
+    var hexGrid = $("<div class='hex-grid'>");
+    data.forEach(function(element, index) {
+      var hex = $(`<div class="hex js-manifestation" data-manifestation-id=${element.id}>`);
+
+      var header = $('<div class="header">');
+      header.append($('<div class="icon">'));
+
+      var headerContent = $('<div class="content">');
+      headerContent.append($(`<span class="date">${element.date}</span>`));
+      headerContent.append($(`<span class="time">${element.time}</span>`));
+
+      header.append(headerContent);
+
+      hex.append(header);
+      hex.append($(`<p>${element.preview}</p>`));
+      hexGrid.append(hex);
+    })
+
+    speechesPage.append(hexGrid);
+    $('.js-manifestation').on('click', function(e) {
+      manifestationPage($(this).data('manifestationId'));
+    })
+  })
+}
+
+function manifestationPage(manifestationId) {
+  $('main').addClass('-solid');
+  loadData('/static/manifestation.json', function(data) {
+    var manifestationPage = $(document.createElement('div'))
+    manifestationPage.addClass('manifestation-page -open js-page');
+    addPage(manifestationPage);
+
+    manifestationPage.append($(`<strong class='date'>${data.date}  às </strong>`));
+    manifestationPage.append($(`<strong class='time'>${data.time}</strong>`));
+    manifestationPage.append($(`<p>${data.content}</p>`));
+  })
+}
+
+loadData("/static/babel.json", function(data) {
   var canvas = drawCanvas('main', 'token');
   var hexagonGroup = createHexagonGroup(canvas, data);
   addHexagons(hexagonGroup, 90);
   hexagonOnClick(hexagonGroup, function(data) {
-    var essevege = $(data.element).closest('.js-svg-root');
-    essevege.removeClass('-active');
-    $('.ball-animation').on('transitionend', function(){
-      essevege.addClass('-hidden');
-      $('.nav-bar').addClass('-black');
+    var currentPage = $(data.element).closest('.js-page');
+    currentPage.removeClass('-active');
+    $('.ball-animation').one('animationend', function(){
+      currentPage.addClass('-hidden');
     });
-    authorsChart(data.id);
+    tokensChart(data.id);
   });
   positionHexagon(hexagonGroup);
   addText(hexagonGroup);

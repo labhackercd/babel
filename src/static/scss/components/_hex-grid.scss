@@ -1,0 +1,64 @@
+.hex-grid {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  & > .hex:nth-child(odd) {
+    margin-left: -100px;
+  }
+
+  & > .hex:nth-child(even) {
+    margin-right: -100px;
+  }
+
+  & > .hex {
+    display: flex;
+    flex-wrap: wrap;
+
+    width: 140px;
+    height: 140px;
+    padding: 30px;
+
+    border-radius: 50%;
+    background-color: #FFF;
+  }
+
+  & > .hex * {
+    color: #000;
+  }
+
+  & > .hex > .header {
+    font-size: 14px;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+  }
+
+  & > .hex > .header > .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  & > .hex > .header > .icon {
+    width: 36px;
+    height: 30px;
+    margin-right: 10px;
+
+    background-image: url('../img/megaphone.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  & > .hex > .header > .content > span {
+    display: block;
+  }
+
+  & > .hex > p {
+    font-size: 12px;
+
+    margin-top: 4px;
+  }
+}

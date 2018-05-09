@@ -1,0 +1,35 @@
+.manifestation-page {
+  position: absolute;
+  top: 0;
+
+  overflow-y: scroll;
+
+  box-sizing: border-box;
+  height: 88vh;
+  padding-top: 20px;
+  padding-right: 8vw;
+  padding-bottom: 20px;
+  padding-left: 8vw;
+
+  transition: all .35s cubic-bezier(.55, 0, .1, 1);
+  transform: translateY(100vh);
+
+  color: #000;
+  background-color: #FFF;
+
+  &.-open {
+    transform: translateY(0);
+  }
+
+  & > strong {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  & > p {
+    font-size: 14px;
+    line-height: 1.5;
+
+    margin-top: 16px;
+  }
+}
