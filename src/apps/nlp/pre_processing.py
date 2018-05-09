@@ -1,8 +1,8 @@
 from collections import Counter
+from functools import lru_cache
+from nltk.corpus import floresta
+from string import digits
 import nltk
-
-EXTRA_STOPWORDS = [',', '.', 'srs', 'sr.', 'sra.', 'deputado', 'presidente',
-                   'é', ':', "''", '`', '!', '``', '?', 'nº', 's.a.']
 
 
 def stemmize(token, stem_reference=None):
@@ -18,24 +18,58 @@ def stemmize(token, stem_reference=None):
     return stemmed
 
 
+@lru_cache()
+def simplify_tag(tag):
+    if "+" in tag:
+        return tag[tag.index("+") + 1:]
+    else:
+        return tag
+
+
+@lru_cache()
+def default_stopwords():
+    twords = floresta.tagged_words()
+    stopwords = nltk.corpus.stopwords.words('portuguese')
+    stopwords += [',', '.', 'srs', 'sr.', 'sra.', 'deputado', 'presidente',
+                  'é', ':', "''", '`', '!', '``', '?', 'nº', 's.a.', 'quero',
+                  'grande', 'dia', 'disse', 'pode', 'nesta', 'vamos', 'vai',
+                  'vez', 'sras', 'dizer', 'falar', 'dar', 'chegou', 'mostrar',
+                  'desses', 'coloca', 'deixou', '%', 'coisa', 'acharam',
+                  'ficar', 'v.exa.', 'conclusao', ')', '(']
+
+    valid_tags = ['adj', 'n', 'prop', 'nprop', 'est', 'npro', 'v-fin', 'v-inf',
+                  'v-ger', 'v-pcp', 'vaux', 'v', 'vp', 'pcp', 'num']
+    for (word, tag) in twords:
+        tag = simplify_tag(tag)
+        words = word.casefold().split('_')
+        if tag not in valid_tags:
+            stopwords += words
+
+    return list(set(stopwords))
+
+
+@lru_cache()
+def stemmize_stopwords():
+    return list(set([
+        stemmize(stopword)
+        for stopword in default_stopwords()
+    ]))
+
+
+def remove_numeric_characters(text):
+    remove_digits = str.maketrans('', '', digits)
+    return text.translate(remove_digits)
+
+
 def tokenize(text):
     return nltk.tokenize.word_tokenize(text, language='portuguese')
 
 
-def stemmize_stopwords(stopwords=None):
-    default_stopwords = nltk.corpus.stopwords.words('portuguese')
-    if stopwords is not None:
-        default_stopwords += stopwords
-
-    return list(set([
-        stemmize(stopword)
-        for stopword in default_stopwords
-    ]))
-
-
+@lru_cache()
 def bow(text, method='frequency'):
+    text = remove_numeric_characters(text)
     tokens = tokenize(text)
-    stopwords = stemmize_stopwords(stopwords=EXTRA_STOPWORDS)
+    stopwords = stemmize_stopwords()
     stem_reference = {}
 
     text_bow = Counter([
