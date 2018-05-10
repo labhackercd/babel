@@ -136,7 +136,7 @@ function showHexagonGroup(hexagonGroup) {
 
 
 function tokensChart(tokenId) {
-  loadData('/static/babel.json', function(data) {
+  loadData('/visualizations/authors/' + tokenId, function(data) {
     var canvas = drawCanvas('main','authors');
     var hexagonGroup = createHexagonGroup(canvas, data);
     addHexagons(hexagonGroup, 90);
@@ -211,7 +211,7 @@ loadData("/visualizations/tokens/", function(data) {
     $('.ball-animation').one('animationend', function(){
       currentPage.addClass('-hidden');
     });
-    tokensChart(data.id);
+    tokensChart(data.stem);
   });
   positionHexagon(hexagonGroup);
   addText(hexagonGroup);
