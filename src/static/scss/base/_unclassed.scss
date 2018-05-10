@@ -1,5 +1,5 @@
 html {
-  font-family: 'Roboto';
+  font-family: 'Roboto', sans-serif;
 
   width: 100%;
 
@@ -66,4 +66,8 @@ svg g {
   &.-active {
     transition: opacity .3s 0s, visibility 0s .3s, width 0s .3s, height 0s .3s;
   }
+}
+
+input {
+  font-family: 'Roboto', sans-serif;
 }
