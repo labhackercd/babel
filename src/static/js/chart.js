@@ -1,14 +1,5 @@
 function loadData(url, callback) {
   var newArray = [];
-  // $.getJSON(url).done(function(json) {
-  //   callback(json);
-  // })
-  // beforeSend: function() {
-  //   console.log('oi');
-  // },
-  // success: function() {
-  //   callback(json);
-  // }
 
   $.ajax({
     type: "GET",
