@@ -13,7 +13,7 @@ var drawHexagon = d3.svg.line()
   .tension("0.25");
 
 function addPage(element) {
-  $('main').append(element);
+  $('.wrapper').append(element);
   $('.js-page').removeClass('-active').addClass('-hidden');
   element.removeClass('-hidden').addClass('-active');
 }
@@ -136,8 +136,8 @@ function showHexagonGroup(hexagonGroup) {
 
 
 function tokensChart(tokenId) {
-  loadData('/visualizations/authors/' + tokenId, function(data) {
-    var canvas = drawCanvas('main','authors');
+  loadData('/static/babel.json', function(data) {
+    var canvas = drawCanvas('.wrapper','authors');
     var hexagonGroup = createHexagonGroup(canvas, data);
     addHexagons(hexagonGroup, 90);
     positionHexagon(hexagonGroup);
@@ -185,24 +185,30 @@ function authorsChart(authorId) {
     $('.js-manifestation').on('click', function(e) {
       manifestationPage($(this).data('manifestationId'));
     })
+
+    var manifestationPageElement = $(document.createElement('div'))
+    manifestationPageElement.addClass('manifestation-page js-page');
+    $('main').append(manifestationPageElement);
   })
 }
 
 function manifestationPage(manifestationId) {
-  $('main').addClass('-solid');
   loadData('/static/manifestation.json', function(data) {
-    var manifestationPage = $(document.createElement('div'))
-    manifestationPage.addClass('manifestation-page -open js-page');
-    addPage(manifestationPage);
-
+    var manifestationPage = $('.manifestation-page');
+    manifestationPage.append($(`<div class='close-manifestation'></div>`));
     manifestationPage.append($(`<strong class='date'>${data.date}  às </strong>`));
     manifestationPage.append($(`<strong class='time'>${data.time}</strong>`));
     manifestationPage.append($(`<p>${data.content}</p>`));
+    manifestationPage.addClass('-open');
+
+    $('.close-manifestation').on('click', function() {
+      manifestationPage.removeClass('-open');
+    });
   })
 }
 
 loadData("/visualizations/tokens/", function(data) {
-  var canvas = drawCanvas('main', 'token');
+  var canvas = drawCanvas('.wrapper', 'token');
   var hexagonGroup = createHexagonGroup(canvas, data);
   addHexagons(hexagonGroup, 90);
   hexagonOnClick(hexagonGroup, function(data) {
@@ -211,7 +217,7 @@ loadData("/visualizations/tokens/", function(data) {
     $('.ball-animation').one('animationend', function(){
       currentPage.addClass('-hidden');
     });
-    tokensChart(data.stem);
+    tokensChart(data.id);
   });
   positionHexagon(hexagonGroup);
   addText(hexagonGroup);
