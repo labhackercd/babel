@@ -13,7 +13,7 @@ var drawHexagon = d3.svg.line()
   .tension("0.25");
 
 function addPage(element) {
-  $('main').append(element);
+  $('.wrapper').append(element);
   $('.js-page').removeClass('-active').addClass('-hidden');
   element.removeClass('-hidden').addClass('-active');
 }
@@ -137,7 +137,7 @@ function showHexagonGroup(hexagonGroup) {
 
 function tokensChart(tokenId) {
   loadData('/static/babel.json', function(data) {
-    var canvas = drawCanvas('main','authors');
+    var canvas = drawCanvas('.wrapper','authors');
     var hexagonGroup = createHexagonGroup(canvas, data);
     addHexagons(hexagonGroup, 90);
     positionHexagon(hexagonGroup);
@@ -193,7 +193,6 @@ function authorsChart(authorId) {
 }
 
 function manifestationPage(manifestationId) {
-  $('main').addClass('-solid');
   loadData('/static/manifestation.json', function(data) {
     var manifestationPage = $('.manifestation-page');
     manifestationPage.append($(`<div class='close-manifestation'></div>`));
@@ -209,7 +208,7 @@ function manifestationPage(manifestationId) {
 }
 
 loadData("/visualizations/tokens/", function(data) {
-  var canvas = drawCanvas('main', 'token');
+  var canvas = drawCanvas('.wrapper', 'token');
   var hexagonGroup = createHexagonGroup(canvas, data);
   addHexagons(hexagonGroup, 90);
   hexagonOnClick(hexagonGroup, function(data) {

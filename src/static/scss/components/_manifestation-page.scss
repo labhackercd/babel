@@ -1,15 +1,11 @@
 .manifestation-page {
-  position: absolute;
-  top: 0;
+  position: fixed;
 
   overflow-y: scroll;
 
   box-sizing: border-box;
   height: 88vh;
-  padding-top: 30px;
-  padding-right: 8vw;
-  padding-bottom: 30px;
-  padding-left: 8vw;
+  padding: 30px 8vw;
 
   transition: all .35s cubic-bezier(.55, 0, .1, 1);
   transform: translateY(100%);
