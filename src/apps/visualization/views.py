@@ -102,12 +102,16 @@ def token_author_manifestations(request, token, author_id):
     return JsonResponse(final_dict, safe=False)
 
 
-def manifestation(request, manifestation_id):
+def manifestation(request, manifestation_id, token):
     manifestation = get_object_or_404(Manifestation, pk=manifestation_id)
+    content = manifestation.content.replace(
+        token,
+        '<span class="-highlight">{}</span>'.format(token)
+    )
     return JsonResponse(
         {
             'date': manifestation.timestamp.strftime('%d/%m/%Y'),
             'time': manifestation.timestamp.strftime('%H:%M'),
-            'content': manifestation.content,
+            'content': content,
         }
     )

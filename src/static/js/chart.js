@@ -194,7 +194,7 @@ function authorsChart(tokenId, authorId) {
 
     speechesPage.append(hexGrid);
     $('.js-manifestation').on('click', function(e) {
-      manifestationPage($(this).data('manifestationId'));
+      manifestationPage($(this).data('manifestationId'), tokenId);
     })
 
     var manifestationPageElement = $(document.createElement('div'))
@@ -203,8 +203,8 @@ function authorsChart(tokenId, authorId) {
   })
 }
 
-function manifestationPage(manifestationId) {
-  loadData(`/visualizations/manifestation/${manifestationId}`, function(data) {
+function manifestationPage(manifestationId, tokenId) {
+  loadData(`/visualizations/manifestation/${manifestationId}/${tokenId}/`, function(data) {
     var manifestationPage = $('.manifestation-page');
 
     manifestationPage.append($(`<div class='close-manifestation'></div>`));

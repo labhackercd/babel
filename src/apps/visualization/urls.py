@@ -6,6 +6,6 @@ urlpatterns = [
     path('authors/<str:token>/', views.token_authors, name="token_authors"),
     path('authors/<str:token>/<int:author_id>/',
          views.token_author_manifestations, name="token_authors"),
-    path('manifestation/<int:manifestation_id>/',
+    path('manifestation/<int:manifestation_id>/<str:token>/',
          views.manifestation, name="vis_manifestation"),
 ]
