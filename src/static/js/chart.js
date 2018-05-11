@@ -1,8 +1,19 @@
 function loadData(url, callback) {
   var newArray = [];
-  $.getJSON(url).done(function(json) {
-    callback(json);
-  })
+
+  $.ajax({
+    type: "GET",
+    url: url,
+    data: "json",
+    beforeSend: function() {
+      $('.hex-loading').addClass('-visible');
+    },
+    success: function(json){
+      $('.hex-loading').removeClass('-visible');
+      callback(json);
+    }
+  });
+
   return newArray;
 }
 
