@@ -1,5 +1,7 @@
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from apps.nlp import models
+from apps.core.models import Manifestation
 from datetime import datetime
 from collections import Counter
 from django.http import JsonResponse
@@ -56,11 +58,11 @@ def token_authors(request, token):
     man_tokens = models.ManifestationToken.objects.filter(token_filter)
     bow = Counter()
     for mt in man_tokens:
-        bow.update([mt.manifestation.profile])
+        bow.update({mt.manifestation.profile: mt.occurrences})
 
     final_dict = []
-    for i, author in enumerate(bow.most_common()):
-        profile = author[0]
+    for i, profile in enumerate(bow.most_common()):
+        profile = profile[0]
         obj = {
             'token': profile.author.name,
             'id': profile.id,
@@ -75,3 +77,37 @@ def token_authors(request, token):
         final_dict.append(obj)
 
     return JsonResponse(final_dict, safe=False)
+
+
+def token_author_manifestations(request, token, author_id):
+    date_filter = get_date_filter('manifestation', request)
+    token_filter = Q(token__stem=token) & date_filter
+    token_filter = token_filter & Q(manifestation__profile__id=author_id)
+    man_tokens = models.ManifestationToken.objects.filter(token_filter)
+
+    bow = Counter()
+    for mt in man_tokens:
+        bow.update({mt.manifestation: mt.occurrences})
+
+    final_dict = []
+    for i, manifestation in enumerate(bow.most_common()):
+        manifestation = manifestation[0]
+        obj = {
+            'id': manifestation.id,
+            'date': manifestation.timestamp.strftime('%d/%m/%Y'),
+            'time': manifestation.timestamp.strftime('%H:%M'),
+            'preview': manifestation.content[:70] + '...',
+        }
+        final_dict.append(obj)
+    return JsonResponse(final_dict, safe=False)
+
+
+def manifestation(request, manifestation_id):
+    manifestation = get_object_or_404(Manifestation, pk=manifestation_id)
+    return JsonResponse(
+        {
+            'date': manifestation.timestamp.strftime('%d/%m/%Y'),
+            'time': manifestation.timestamp.strftime('%H:%M'),
+            'content': manifestation.content,
+        }
+    )

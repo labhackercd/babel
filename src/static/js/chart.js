@@ -147,7 +147,7 @@ function showHexagonGroup(hexagonGroup) {
 
 
 function tokensChart(tokenId) {
-  loadData('/static/babel.json', function(data) {
+  loadData(`/visualizations/authors/${tokenId}`, function(data) {
     var canvas = drawCanvas('.wrapper','authors');
     var hexagonGroup = createHexagonGroup(canvas, data);
     addHexagons(hexagonGroup, 90);
@@ -162,14 +162,14 @@ function tokensChart(tokenId) {
         $('body').removeClass('-invertedbg');
         $('.nav-bar').removeClass('-negative');
 
-        authorsChart(data.id);
+        authorsChart(tokenId, data.id);
       });
     })
   })
 }
 
-function authorsChart(authorId) {
-  loadData("/static/authors.json", function(data) {
+function authorsChart(tokenId, authorId) {
+  loadData(`/visualizations/authors/${tokenId}/${authorId}`, function(data) {
     var speechesPage = $(document.createElement('div'))
     speechesPage.addClass('speeches js-page');
     addPage(speechesPage);
@@ -204,8 +204,9 @@ function authorsChart(authorId) {
 }
 
 function manifestationPage(manifestationId) {
-  loadData('/static/manifestation.json', function(data) {
+  loadData(`/visualizations/manifestation/${manifestationId}`, function(data) {
     var manifestationPage = $('.manifestation-page');
+
     manifestationPage.append($(`<div class='close-manifestation'></div>`));
     manifestationPage.append($(`<strong class='date'>${data.date}  às </strong>`));
     manifestationPage.append($(`<strong class='time'>${data.time}</strong>`));
@@ -228,7 +229,7 @@ loadData("/visualizations/tokens/", function(data) {
     $('.ball-animation').one('animationend', function(){
       currentPage.addClass('-hidden');
     });
-    tokensChart(data.id);
+    tokensChart(data.stem);
   });
   positionHexagon(hexagonGroup);
   addText(hexagonGroup);
