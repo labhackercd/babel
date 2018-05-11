@@ -71,3 +71,18 @@ svg g {
 input {
   font-family: 'Roboto', sans-serif;
 }
+
+.-highlight {
+  cursor: pointer;
+  transition: all .2s cubic-bezier(.19, .01, .03, 1.01);
+  text-decoration: none;
+
+  color: #7820E8;
+  background-image: linear-gradient(180deg,transparent 65%,rgba(#7820E8, .1) 0);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  &:hover {
+    background-size: 100% 100%;
+  }
+}
