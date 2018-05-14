@@ -7,15 +7,15 @@ $('.close').click(function() {
 });
 
 $('.back').on('click', function() {
-  $('.nav-bar').removeClass('-negative');
-  var current = $('.js-svg-root.-active');
-  var prev = current.prev('.js-svg-root');
-  current.addClass('-hidden');
+  var current = $('.js-page.-active');
+  var prev = current.prev('.js-page');
+  current.addClass('_hidden');
   current.one('transitionend', function(){
     current.removeClass('-active');
     $('body').removeClass('-invertedbg');
     current.remove();
-    prev.removeClass('-hidden').addClass('-active');
+    prev.removeClass('_hidden').addClass('-active');
+    $('.nav-bar').removeClass('-negative');
     $('.ball-animation').addClass('-active -reverse').one('animationend', function(){
       $(this).removeClass('-active -reverse');
     });

@@ -25,8 +25,8 @@ var drawHexagon = d3.svg.line()
 
 function addPage(element) {
   $('.wrapper').append(element);
-  $('.js-page').removeClass('-active').addClass('-hidden');
-  element.removeClass('-hidden').addClass('-active');
+  $('.js-page').removeClass('-active').addClass('_hidden');
+  element.removeClass('_hidden').addClass('-active');
 }
 
 function zoomInAnimation(element) {
@@ -50,7 +50,7 @@ function drawCanvas(selector, chartName) {
     .append("div")
     .classed('js-page', true)
     .classed('-active', true)
-    .classed("svg", true)
+    .classed("svg-wrapper", true)
       .append("svg")
       .classed("js-svg-root", true)
       .attr("data-chart-name", chartName)
@@ -70,7 +70,7 @@ function createHexagonGroup(canvas, data) {
         var chartName = $(this).closest('.js-svg-root').data('chartName');
         return `${chartName}-hexagon-${d.id}`;
       })
-      .classed('-hidden', true)
+      .classed('_hidden', true)
       .classed('-small', true)
       .attr("transform-origin", "center top");
 }
@@ -143,7 +143,7 @@ function addText(hexagonGroup) {
 function showHexagonGroup(hexagonGroup) {
   hexagonGroup.each(function(d, i) {
     setTimeout(function() {
-      $(d.element).removeClass('-hidden');
+      $(d.element).removeClass('_hidden');
     }, i * 150)
   })
 }
@@ -230,7 +230,7 @@ loadData("/visualizations/tokens/", function(data) {
     var currentPage = $(data.element).closest('.js-page');
     currentPage.removeClass('-active');
     $('.ball-animation').one('animationend', function(){
-      currentPage.addClass('-hidden');
+      currentPage.addClass('_hidden');
     });
     tokensChart(data.stem);
   });
