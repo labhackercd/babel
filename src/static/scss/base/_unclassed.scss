@@ -22,10 +22,6 @@ body {
     background-color: #FFF;
   }
 
-  &.-invertedbg .wrapper {
-    overflow: hidden;
-  }
-
   &.-invertedbg .svg-wrapper.-active svg path {
     fill: #8E6DDF;
   }
@@ -54,10 +50,6 @@ svg g {
   transition: opacity .35s linear;
 
   opacity: 1;
-}
-
-.svg {
-  height: 200vh;
 }
 
 input {
