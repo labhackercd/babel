@@ -48,15 +48,16 @@ function zoomInAnimation(element) {
 function drawCanvas(selector, chartName) {
   return d3.select(selector)
     .append("div")
-      .classed("svg", true)
+    .classed('js-page', true)
+    .classed('-active', true)
+    .classed("svg", true)
       .append("svg")
-      .classed('js-page', true)
       .classed("js-svg-root", true)
-      .classed('-active', true)
+      .attr("data-chart-name", chartName)
       .attr("width", "100%")
       .attr("height", "100%")
-      .attr("data-chart-name", chartName)
       .append('g')
+        .classed("js-chart", true)
         .attr("transform-origin", "center top");
 }
 
