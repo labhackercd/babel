@@ -1,12 +1,12 @@
 .hex-bg {
   position: relative;
+  z-index: -1;
 
   display: flex;
   flex-wrap: wrap;
 
   & > .element {
     position: absolute;
-    z-index: -1;
 
     width: 300px;
     height: 330px;
@@ -43,5 +43,4 @@
   & > .element:nth-child(5) {
     top: 1200px;
   }
-
 }
