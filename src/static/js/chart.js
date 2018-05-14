@@ -47,15 +47,17 @@ function zoomInAnimation(element) {
 
 function drawCanvas(selector, chartName) {
   return d3.select(selector)
-    .append("svg")
-    .classed('js-page', true)
-    .classed("js-svg-root", true)
-    .classed('-active', true)
-    .attr("width", "100%")
-    .attr("height", "100%")
-    .attr("data-chart-name", chartName)
-    .append('g')
-      .attr("transform-origin", "center top");
+    .append("div")
+      .classed("svg", true)
+      .append("svg")
+      .classed('js-page', true)
+      .classed("js-svg-root", true)
+      .classed('-active', true)
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("data-chart-name", chartName)
+      .append('g')
+        .attr("transform-origin", "center top");
 }
 
 function createHexagonGroup(canvas, data) {

@@ -39,7 +39,7 @@ body {
   position: absolute;
   top: 80px;
 
-  overflow: none;
+  overflow-y: scroll;
 
   width: 100%;
   height: 80vh;
@@ -53,6 +53,10 @@ svg g {
   transition: opacity .35s linear;
 
   opacity: 1;
+}
+
+.svg {
+  height: 200vh;
 }
 
 .-hidden {
