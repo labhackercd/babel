@@ -66,6 +66,8 @@ function createHexagonGroup(canvas, data) {
     .data(data)
     .enter()
       .append('g')
+        .classed("hexagon-group", true)
+      .append('g')
       .attr('id', function(d, i) {
         var chartName = $(this).closest('.js-svg-root').data('chartName');
         return `${chartName}-hexagon-${d.id}`;

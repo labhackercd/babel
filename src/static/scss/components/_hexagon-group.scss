@@ -1,0 +1,23 @@
+.hexagon-group {
+  animation-name: floating;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+
+  @keyframes floating {
+    from {
+      transform: translate(0, 0) translateZ(0);
+    }
+    55% {
+      transform: translate(.5%, .5%) translateZ(0);
+    }
+    to {
+      transform: translate(0, 0) translateZ(0);
+    }
+  }
+
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      animation-duration: (random(6) + 4)+s
+    }
+  }
+}
