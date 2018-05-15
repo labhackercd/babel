@@ -17,11 +17,27 @@ function loadData(url, callback) {
   return newArray;
 }
 
-var drawHexagon = d3.svg.line()
-  .x(function(d) { return d.x; })
-  .y(function(d) { return d.y; })
-  .interpolate("cardinal-closed")
-  .tension("0.25");
+function drawHexagon(scale, radius = 90) {
+  var h = (Math.sqrt(3)/2),
+  scaledRadius = radius * scale,
+  hexagonData = [
+    { "x": scaledRadius,   "y": 0},
+    { "x": scaledRadius / 2,  "y": scaledRadius * h},
+    { "x": - scaledRadius / 2,  "y": scaledRadius * h},
+    { "x": - scaledRadius,  "y": 0},
+    { "x": - scaledRadius / 2,  "y": - scaledRadius * h},
+    { "x": scaledRadius / 2, "y": - scaledRadius * h}
+  ];
+  console.log(hexagonData)
+
+  var draw = d3.svg.line()
+    .x(function(d) { return d.x; })
+    .y(function(d) { return d.y; })
+    .interpolate("cardinal-closed")
+    .tension("0.25");
+
+  return draw(hexagonData)
+}
 
 function addPage(element) {
   $('.wrapper').append(element);
@@ -67,14 +83,19 @@ function createHexagonGroup(canvas, data) {
     .enter()
       .append('g')
         .classed("hexagon-group", true)
-      .append('g')
-      .attr('id', function(d, i) {
-        var chartName = $(this).closest('.js-svg-root').data('chartName');
-        return `${chartName}-hexagon-${d.id}`;
-      })
-      .classed('_hidden', true)
-      .classed('-small', true)
-      .attr("transform-origin", "center top");
+        .classed('js-hexagon-group', true)
+        .attr('data-id', function(d, i) {
+          return d.id;
+        })
+        .attr("transform-origin", "center")
+        .append('g')
+          .attr('id', function(d, i) {
+            var chartName = $(this).closest('.js-svg-root').data('chartName');
+            return `${chartName}-hexagon-${d.id}`;
+          })
+          .classed('_hidden', true)
+          .classed('-small', true)
+          .attr("transform-origin", "center top");
 }
 
 function hexagonOnClick(hexagonGroup, callback) {
@@ -86,19 +107,10 @@ function hexagonOnClick(hexagonGroup, callback) {
 
 function addHexagons(hexagonGroup, radius) {
   hexagonGroup.append("path")
+  .classed('js-hexagon', true)
   .attr("fill", "white")
   .attr("d", function(d, i) {
-    var h = (Math.sqrt(3)/2),
-      scaledRadius = radius * d.size,
-      hexagonData = [
-        { "x": scaledRadius,   "y": 0},
-        { "x": scaledRadius / 2,  "y": scaledRadius * h},
-        { "x": - scaledRadius / 2,  "y": scaledRadius * h},
-        { "x": - scaledRadius,  "y": 0},
-        { "x": - scaledRadius / 2,  "y": - scaledRadius * h},
-        { "x": scaledRadius / 2, "y": - scaledRadius * h}
-      ];
-      return drawHexagon(hexagonData);
+    return drawHexagon(d.size, radius);
   })
 }
 
