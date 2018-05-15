@@ -69,8 +69,6 @@ function drawCanvas(selector, chartName) {
       .append("svg")
       .classed("js-svg-root", true)
       .attr("data-chart-name", chartName)
-      .attr("width", "100%")
-      .attr("height", "100%")
       .append('g')
         .classed("js-chart", true)
         .attr("transform-origin", "center top");

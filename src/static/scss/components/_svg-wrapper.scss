@@ -1,6 +1,6 @@
 .svg-wrapper {
-  height: 200vh;
   display: flex;
   justify-content: center;
-  padding-top: 1rem;
+
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, black 45px, black calc(100% - 45px), rgba(0, 0, 0, 0) 100%);
 }
