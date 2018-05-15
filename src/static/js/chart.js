@@ -28,7 +28,6 @@ function drawHexagon(scale, radius = 90) {
     { "x": - scaledRadius / 2,  "y": - scaledRadius * h},
     { "x": scaledRadius / 2, "y": - scaledRadius * h}
   ];
-  console.log(hexagonData)
 
   var draw = d3.svg.line()
     .x(function(d) { return d.x; })
@@ -119,8 +118,8 @@ function positionHexagon(hexagonGroup) {
     d['element'] = this;
     bbox = this.getBoundingClientRect();
 
-    var translateX = 120;
-    var translateY = 140;
+    var translateX = bbox.width / 2;
+    var translateY = bbox.height / 2;
 
     var previous = hexagonGroup.data()[i - 1];
     if (previous) {
@@ -162,6 +161,15 @@ function showHexagonGroup(hexagonGroup) {
   })
 }
 
+function updateCanvasSize(canvas) {
+  var chart = canvas[0][0];
+  var bbox = chart.getBBox();
+
+  var svg = $(chart).closest('.js-svg-root');
+  svg.width(bbox.width);
+  svg.height(bbox.height);
+}
+
 
 function tokensChart(tokenId) {
   loadData(`/visualizations/authors/${tokenId}`, function(data) {
@@ -182,6 +190,7 @@ function tokensChart(tokenId) {
         authorsChart(tokenId, data.id);
       });
     })
+    updateCanvasSize(canvas);
   })
 }
 
@@ -251,4 +260,5 @@ loadData("/visualizations/tokens/", function(data) {
   positionHexagon(hexagonGroup);
   addText(hexagonGroup);
   showHexagonGroup(hexagonGroup);
+  updateCanvasSize(canvas);
 })
