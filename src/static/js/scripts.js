@@ -22,6 +22,14 @@ $('.back').on('click', function() {
   });
 })
 
+function setNavigationTitle(title){
+  $('.js-title').text(title);
+}
+
+function setNavigationName(name){
+  $('.js-name').text(name);
+}
+
 document.addEventListener('touchmove', function(e) {
   return false;
 });

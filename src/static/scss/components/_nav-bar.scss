@@ -45,15 +45,13 @@
     text-transform: uppercase;
   }
 
-  & > .info > .breadcrumb > .brand,
   & > .info > .breadcrumb > .title {
     font-weight: bold;
     font-size: 20px;
   }
 
-  & > .info > .breadcrumb > .title,
-  & > .info > .back {
-    display: none;
+  & > .info > .breadcrumb > .name {
+    font-size: 10px;
   }
 
   & > .filter {
@@ -76,17 +74,7 @@
       background-image: url('../img/filter-black.svg');
     }
 
-    & > .info > .breadcrumb > .brand {
-      display: none;
-    }
-
-    & > .info > .breadcrumb > .title {
-      display: block;
-    }
-
     & > .info > .back {
-      display: block;
-
       background-image: url('../img/arrow-black.svg');
     }
   }
