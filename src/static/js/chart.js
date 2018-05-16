@@ -165,7 +165,15 @@ function updateCanvasSize(canvas) {
 
   var svg = $(chart).closest('.js-svg-root');
   svg.width(bbox.width);
-  svg.height(bbox.height);
+  svg.height(bbox.height * 1.001);
+}
+
+function setTransformOrigin(canvas) {
+  var chart = canvas[0][0];
+  var svgRoot = $(chart).closest('.js-svg-root');
+  var lastHexagon = $(chart).find('.js-hexagon-group').last()[0];
+  var bbox = lastHexagon.getBBox();
+  svgRoot.css('transform-origin', `${bbox.x + bbox.width * 1.5}px 99.95%`);
 }
 
 
@@ -189,6 +197,7 @@ function tokensChart(tokenId) {
       });
     })
     updateCanvasSize(canvas);
+    setTransformOrigin(canvas);
   })
 }
 
@@ -259,4 +268,5 @@ loadData("/visualizations/tokens/", function(data) {
   addText(hexagonGroup);
   showHexagonGroup(hexagonGroup);
   updateCanvasSize(canvas);
+  setTransformOrigin(canvas);
 })

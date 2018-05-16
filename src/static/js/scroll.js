@@ -1,29 +1,30 @@
-// var VirtualScroll = require('virtual-scroll');
-//
-// var targetY = 0;
-// var scroll = VirtualScroll();
-//
-// scroll.on(function(e, i) {
-//   var scrollable = d3.select('.js-svg-root:not(.-hidden) g');
-//   var chartHeight = scrollable.node().getBoundingClientRect().height;
-//
-//   targetY = Math.min(0, e.y);
-//   var minY = 0 - chartHeight;
-//   targetY = Math.max(targetY, minY);
-//
-//   if (targetY >= chartHeight) {
-//     VirtualScroll.destroy();
-//   }
-//
-//   var scale = (1 + Math.abs(targetY) / chartHeight);
-//   console.log(chartHeight - Math.abs(targetY));
-//
-//   scrollable.attr('transform', `translate(0, ${targetY}) scale(${scale})`);
-// })
+var scrollPosition = 0;
+var maxScroll = 30000;
+var maxScale = 600;
 
-// $('main').pressAndHold({
-// 	holdTime: 1000,
-// 	progressIndicatorRemoveDelay: 900,
-// 	progressIndicatorColor: "blue",
-// 	progressIndicatorOpacity: 0.3
-// })
+
+var hammertime = new Hammer($(".wrapper")[0]);
+
+hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+
+hammertime.on('panup pandown', function(e) {
+  scrollPosition = scrollPosition - e.deltaY;
+  if (scrollPosition < 0) {
+    scrollPosition = 0;
+  } else if (scrollPosition > maxScroll) {
+    scrollPosition = maxScroll;
+  }
+
+  var scrollRatio = scrollPosition / maxScroll;
+
+  var svg = $('.js-page.-active > .js-svg-root')[0];
+  var scale = svg.style.getPropertyValue('transform').match(/scale\((?<value>.+)\)/);
+
+  if (scale === null) {
+    scale = 1;
+  } else {
+    scale = maxScale ** scrollRatio;
+  }
+
+  $(svg).css('transform', `scale(${scale})`);
+});

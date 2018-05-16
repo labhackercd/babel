@@ -20,14 +20,12 @@
     {% endblock %}
 
     <script src="{% static "jquery/dist/jquery.min.js" %}" charset="utf-8"></script>
+    <script src="{% static "hammerjs/hammer.min.js" %}" charset="utf-8"></script>
     <script src="{% static "d3/d3.min.js" %}" charset="utf-8"></script>
-    {% compress js %}
-      <script type="module" src="{% static "virtual-scroll/src/index.js" %}" charset="utf-8"></script>
-      <script type="module" src="{% static "js/scroll.js" %}" charset="utf-8"></script>
-    {% endcompress %}
 
     <script src="{% static "js/teste.js" %}" charset="utf-8"></script>
     <script src="{% static "js/scripts.js" %}" charset="utf-8"></script>
     <script src="{% static "js/chart.js" %}" charset="utf-8"></script>
+    <script src="{% static "js/scroll.js" %}" charset="utf-8"></script>
   </body>
 </html>
