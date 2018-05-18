@@ -22,17 +22,18 @@ def process_manifestation(sender, instance, created, **kwargs):
         ).delete()
 
     bow, stem_reference = pre_processing.bow(instance.content)
-    max_value = max(bow.values())
-    for stem, occurrences in bow.items():
-        token = models.Token.objects.get_or_create(stem=stem)[0]
-        for original_word, occurrences in stem_reference[stem].items():
-            token.add_original_word(original_word, times=occurrences)
-        token.save()
+    if len(bow) > 0:
+        max_value = max(bow.values())
+        for stem, occurrences in bow.items():
+            token = models.Token.objects.get_or_create(stem=stem)[0]
+            for original_word, occurrences in stem_reference[stem].items():
+                token.add_original_word(original_word, times=occurrences)
+            token.save()
 
-        mt = models.ManifestationToken()
-        mt.manifestation = instance
-        mt.token = token
-        mt.occurrences = occurrences
-        mt.frequency = occurrences / max_value
-        mt.save()
-        print(mt)
+            mt = models.ManifestationToken()
+            mt.manifestation = instance
+            mt.token = token
+            mt.occurrences = occurrences
+            mt.frequency = occurrences / max_value
+            mt.save()
+            print(mt)
