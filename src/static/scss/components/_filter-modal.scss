@@ -1,21 +1,22 @@
 .filter-modal {
   position: fixed;
   z-index: 1;
-  top: -100vh;
+  top: 0;
   left: 0;
 
   box-sizing: border-box;
   width: 100%;
   padding: 20px 8vw;
 
-  transition: top cubic-bezier(.55,0,.1,1) .5s;
+  transition: transform cubic-bezier(.55,0,.1,1) .5s;
+  transform: translateY(-105%);
 
   color: #000;
   background-color: #FFF;
   box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
 
   &.-active {
-    top: 0;
+    transform: translateY(0);
   }
 
   & > .nav {
