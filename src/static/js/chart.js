@@ -172,9 +172,10 @@ function updateCanvasSize(canvas) {
 function setTransformOrigin(canvas) {
   var chart = canvas[0][0];
   var svgRoot = $(chart).closest('.js-svg-root');
+  var svgBBox = svgRoot[0].getBBox();
   var lastHexagon = $(chart).find('.js-hexagon-group').last()[0];
   var bbox = lastHexagon.getBBox();
-  svgRoot.css('transform-origin', `${bbox.x + bbox.width * 1.5}px 99.95%`);
+  svgRoot.css('transform-origin', `${bbox.x / svgBBox.width * 100}% 99.95%`);
 }
 
 

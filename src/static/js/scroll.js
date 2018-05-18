@@ -26,5 +26,5 @@ hammertime.on('panup pandown', function(e) {
     scale = maxScale ** scrollRatio;
   }
 
-  $(svg).css('transform', `scale(${scale})`);
+  $(svg).css('transform', `scale(${scale}) translateZ(0)`);
 });
