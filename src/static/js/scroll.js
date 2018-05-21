@@ -1,30 +1,38 @@
-var scrollPosition = 0;
-var maxScroll = 30000;
-var maxScale = 600;
+function enableScroll() {
+  var scrollPosition = 0;
+  var idealHexagonNumber = 20;
+  var hexagonsNumber = $('.js-page.-active .js-hexagon-group').length;
+
+  var maxScroll = 30000 * (hexagonsNumber / idealHexagonNumber);
+  var maxScale = 600 ** (hexagonsNumber / idealHexagonNumber);
+
+  console.log(maxScroll)
+  console.log(maxScale)
 
 
-var hammertime = new Hammer($(".wrapper")[0]);
+  var hammertime = new Hammer($(".wrapper")[0]);
 
-hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+  hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
 
-hammertime.on('panup pandown', function(e) {
-  scrollPosition = scrollPosition - e.deltaY;
-  if (scrollPosition < 0) {
-    scrollPosition = 0;
-  } else if (scrollPosition > maxScroll) {
-    scrollPosition = maxScroll;
-  }
+  hammertime.on('panup pandown', function(e) {
+    scrollPosition = scrollPosition - e.deltaY;
+    if (scrollPosition < 0) {
+      scrollPosition = 0;
+    } else if (scrollPosition > maxScroll) {
+      scrollPosition = maxScroll;
+    }
 
-  var scrollRatio = scrollPosition / maxScroll;
+    var scrollRatio = scrollPosition / maxScroll;
 
-  var svg = $('.js-page.-active > .js-svg-root')[0];
-  var scale = svg.style.getPropertyValue('transform').match(/scale\((?<value>.+)\)/);
+    var svg = $('.js-page.-active > .js-svg-root')[0];
+    var scale = svg.style.getPropertyValue('transform').indexOf('scale');
+    if (scale === -1) {
+      scale = 1;
+    } else {
+      scale = maxScale ** scrollRatio;
+    }
 
-  if (scale === null) {
-    scale = 1;
-  } else {
-    scale = maxScale ** scrollRatio;
-  }
+    $(svg).css('transform', `scale(${scale}) translateZ(0)`);
+  });
 
-  $(svg).css('transform', `scale(${scale}) translateZ(0)`);
-});
+}
