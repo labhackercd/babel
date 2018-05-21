@@ -1,0 +1,11 @@
+.simple-link {
+  padding: 20px;
+
+  text-decoration: underline;
+
+  color: #000;
+
+  &:active {
+    color: $color-brand;
+  }
+}
