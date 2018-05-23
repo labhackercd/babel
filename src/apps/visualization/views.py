@@ -34,7 +34,7 @@ def tokens(request):
 
     tokens = models.Token.objects.all()
     final_dict = []
-    for i, stem in enumerate(bow.most_common(20)):
+    for i, stem in enumerate(bow.most_common(15)):
         token = tokens.get(stem=stem[0])
 
         obj = {}
@@ -61,7 +61,7 @@ def token_authors(request, token):
         bow.update({mt.manifestation.profile: mt.occurrences})
 
     final_dict = []
-    for i, profile in enumerate(bow.most_common()):
+    for i, profile in enumerate(bow.most_common(15)):
         profile = profile[0]
         obj = {
             'token': profile.author.name,
