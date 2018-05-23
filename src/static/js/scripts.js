@@ -6,21 +6,40 @@ $('.close').click(function() {
   $('.filter-modal').removeClass('-active');
 });
 
+var previousPageRelation = {
+  'tokens': null,
+  'authors': 'tokens',
+  'manifestations': 'authors',
+  'manifestation': 'authors',
+}
+
 $('.back').on('click', function() {
-  var current = $('.js-page.-active');
-  var prev = current.prev('.js-page');
-  current.addClass('_hidden');
-  current.one('transitionend', function(){
-    current.removeClass('-active');
-    $('body').removeClass('-invertedbg');
-    current.remove();
-    prev.removeClass('_hidden').addClass('-active');
-    $('.nav-bar').removeClass('-negative');
-    $('.ball-animation').addClass('-active -reverse').one('animationend', function(){
-      $(this).removeClass('-active -reverse');
+  if (previousPageRelation[visiblePage]) {
+    if (visiblePage === 'manifestation') {
+      var manifestationPage = $('.manifestation-page');
+      manifestationPage.removeClass('-open');
+    }
+    var current = $('.js-page.-active');
+    var prev = current.prev('.js-page');
+    current.addClass('_hidden');
+    current.one('transitionend', function(){
+      current.removeClass('-active');
+      $('body').removeClass('-invertedbg');
+      current.remove();
+      prev.removeClass('_hidden').addClass('-active');
+      $('.nav-bar').removeClass('-negative');
+      $('.ball-animation').addClass('-active -reverse').one('animationend', function(){
+        $(this).removeClass('-active -reverse');
+      });
+      enableScroll(previousScroll);
+      if (visiblePage === 'manifestation' || visiblePage === 'manifestations') {
+        setNavigationName('');
+      } else if (visiblePage === 'authors') {
+        setNavigationTitle('Babel');
+      }
+      visiblePage = previousPageRelation[visiblePage];
     });
-    enableScroll(previousScroll);
-  });
+  }
 })
 
 function setNavigationTitle(title){
