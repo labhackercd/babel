@@ -4,7 +4,7 @@
   overflow-y: scroll;
 
   box-sizing: border-box;
-  height: 100%;
+  height: calc(100% - 80px);
   padding: 30px 8vw;
 
   transition: all .35s cubic-bezier(.55, 0, .1, 1);
