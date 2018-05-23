@@ -248,10 +248,14 @@ function manifestationPage(manifestationId, tokenId) {
     var manifestationPage = $('.manifestation-page');
 
     manifestationPage.html(`
-      <div class='close-manifestation'></div>
-      <strong class='date'>${data.date}  às </strong>
-      <strong class='time'>${data.time}</strong>
-      <p>${data.content}</p>
+      <div class="header">
+        <div class='close-manifestation'></div>
+        <strong class='date'>${data.date}  às </strong>
+        <strong class='time'>${data.time}</strong>
+      </div>
+      <div class="content">
+        <p>${data.content}</p>
+      </div>
     `);
     manifestationPage.addClass('-open');
 
