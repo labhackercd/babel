@@ -63,8 +63,8 @@
     &:focus {
       transition: none;
 
-      color: #8753ED;
-      border-color: #8753ED;
+      color: $color-purple-dark;
+      border-color: $color-purple-dark;
       outline: none;
     }
   }
@@ -82,10 +82,10 @@
     text-decoration: none;
 
     color: #FFF;
-    background-color: #8E6DDF;
+    background-color: $color-purple;
 
     &:hover {
-      background-color: #7820E8;
+      background-color: $color-purple-dark;
     }
   }
 
