@@ -19,6 +19,7 @@ $('.back').on('click', function() {
     $('.ball-animation').addClass('-active -reverse').one('animationend', function(){
       $(this).removeClass('-active -reverse');
     });
+    enableScroll(previousScroll);
   });
 })
 

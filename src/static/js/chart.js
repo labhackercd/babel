@@ -1,3 +1,4 @@
+var visiblePage = undefined;
 function loadData(url, callback) {
   var newArray = [];
 
@@ -201,6 +202,8 @@ function tokensChart(tokenId) {
     })
     updateCanvasSize(canvas);
     setTransformOrigin(canvas);
+    enableScroll();
+    visiblePage = 'authors';
   })
 }
 
@@ -236,6 +239,7 @@ function authorsChart(tokenId, authorId) {
     var manifestationPageElement = $(document.createElement('div'))
     manifestationPageElement.addClass('manifestation-page js-page');
     $('main').append(manifestationPageElement);
+    visiblePage = 'manifestations';
   })
 }
 
@@ -243,15 +247,18 @@ function manifestationPage(manifestationId, tokenId) {
   loadData(`/visualizations/manifestation/${manifestationId}/${tokenId}/`, function(data) {
     var manifestationPage = $('.manifestation-page');
 
-    manifestationPage.append($(`<div class='close-manifestation'></div>`));
-    manifestationPage.append($(`<strong class='date'>${data.date}  às </strong>`));
-    manifestationPage.append($(`<strong class='time'>${data.time}</strong>`));
-    manifestationPage.append($(`<p>${data.content}</p>`));
+    manifestationPage.html(`
+      <div class='close-manifestation'></div>
+      <strong class='date'>${data.date}  às </strong>
+      <strong class='time'>${data.time}</strong>
+      <p>${data.content}</p>
+    `);
     manifestationPage.addClass('-open');
 
     $('.close-manifestation').on('click', function() {
       manifestationPage.removeClass('-open');
     });
+    visiblePage = 'manifestation';
   })
 }
 
@@ -266,6 +273,7 @@ loadData("/visualizations/tokens/", function(data) {
       currentPage.addClass('_hidden');
       setNavigationTitle(data.token);
     });
+    previousScroll = scrollPosition;
     tokensChart(data.stem);
   });
   positionHexagon(hexagonGroup);
@@ -273,4 +281,6 @@ loadData("/visualizations/tokens/", function(data) {
   showHexagonGroup(hexagonGroup);
   updateCanvasSize(canvas);
   setTransformOrigin(canvas);
+  enableScroll();
+  visiblePage = 'tokens';
 })

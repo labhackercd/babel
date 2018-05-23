@@ -1,16 +1,15 @@
-function enableScroll() {
-  var scrollPosition = 0;
+var hammertime;
+var previousScroll = 0;
+var scrollPosition = 0;
+function enableScroll(initialPosition = 0) {
+  scrollPosition = initialPosition;
   var idealHexagonNumber = 20;
   var hexagonsNumber = $('.js-page.-active .js-hexagon-group').length;
 
   var maxScroll = 30000 * (hexagonsNumber / idealHexagonNumber);
   var maxScale = 600 ** (hexagonsNumber / idealHexagonNumber);
 
-  console.log(maxScroll)
-  console.log(maxScale)
-
-
-  var hammertime = new Hammer($(".wrapper")[0]);
+  hammertime = new Hammer($(".wrapper")[0]);
 
   hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
 
@@ -34,5 +33,4 @@ function enableScroll() {
 
     $(svg).css('transform', `scale(${scale}) translateZ(0)`);
   });
-
 }
