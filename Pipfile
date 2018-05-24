@@ -23,6 +23,10 @@ requests = "*"
 pprint = "*"
 jsonfield = "*"
 click = "*"
+django-celery-beat = "*"
+redis = "*"
+celery = {extras = ["redis"]}
+django-celery-results = "*"
 
 [requires]
 python_version = "3.6"

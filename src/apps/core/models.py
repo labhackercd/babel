@@ -2,6 +2,9 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from apps.core import model_mixings
 from django.template.defaultfilters import truncatechars
+from django_celery_beat.models import (PeriodicTask, IntervalSchedule,
+                                       CrontabSchedule)
+import json
 
 
 class Channel(models.Model):
@@ -218,3 +221,36 @@ class RelationshipProfileAttribute(model_mixings.AttributeMixing):
     class Meta:
         verbose_name = _('relationship profile attribute')
         verbose_name_plural = _('relationship profile attributes')
+
+
+def collect_post_save(sender, instance, created, **kwargs):
+    schedule, created = IntervalSchedule.objects.get_or_create(
+        every=instance.periodicity,
+        period=IntervalSchedule.SECONDS,
+    )
+    periodic_task = PeriodicTask.objects.create(
+        interval=schedule,
+        name='Get %s data' % (instance.channel.name),
+        task='apps.core.tasks.get_channel_data',
+        kwargs=json.dumps({'channel_id': instance.id}),
+        # start_time=instance.initial_time,   ## available in next version
+        last_run_at=instance.end_time,
+        enabled=False
+    )
+    crontab_schedule, crontab_created = CrontabSchedule.objects.get_or_create(
+        minute=instance.initial_time.minute,
+        hour=instance.initial_time.hour,
+        day_of_month=instance.initial_time.day,
+        month_of_year=instance.initial_time.month,
+    )
+    PeriodicTask.objects.create(
+        crontab=crontab_schedule,
+        name='Start crawl %s at' % (instance.channel.name),
+        task='apps.core.tasks.start_periodic_task',
+        kwargs=json.dumps({
+            'periodic_id': periodic_task.id,
+        })
+    )
+
+
+models.signals.post_save.connect(collect_post_save, sender=Collect)
