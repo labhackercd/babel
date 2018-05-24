@@ -1,6 +1,6 @@
 .filter-modal {
   position: fixed;
-  z-index: 1;
+  z-index: map-get($z-index, filter-modal);
   top: 0;
   left: 0;
 
@@ -100,6 +100,8 @@
     height: 16px;
     margin-right: -10px;
     padding: 10px;
+
+    cursor: pointer;
 
     background-image: url('../img/close.svg');
     background-repeat: no-repeat;

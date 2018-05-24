@@ -1,11 +1,10 @@
 .ball-animation {
   position: absolute;
-  z-index: 1;
+  z-index: map-get($z-index, ball-animation);
   top: 0;
   left: 0;
 
   display: none;
-  // opacity: 0;
 
   width: 1px;
   height: 1px;
