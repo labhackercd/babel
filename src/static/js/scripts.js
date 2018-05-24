@@ -30,14 +30,16 @@ $('.back').on('click', function() {
       $('.nav-bar').removeClass('-negative');
       $('.ball-animation').addClass('-active -reverse').one('animationend', function(){
         $(this).removeClass('-active -reverse');
+        if (visiblePage === 'manifestation' || visiblePage === 'manifestations') {
+          setNavigationName('');
+          enableScroll(authorsScroll);
+        } else if (visiblePage === 'authors') {
+          setNavigationTitle('Babel');
+          $('.js-back').addClass('_hidden');
+          enableScroll(tokensScroll);
+        }
+        visiblePage = previousPageRelation[visiblePage];
       });
-      enableScroll(previousScroll);
-      if (visiblePage === 'manifestation' || visiblePage === 'manifestations') {
-        setNavigationName('');
-      } else if (visiblePage === 'authors') {
-        setNavigationTitle('Babel');
-      }
-      visiblePage = previousPageRelation[visiblePage];
     });
   }
 })

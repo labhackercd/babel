@@ -1,5 +1,6 @@
 var hammertime;
-var previousScroll = 0;
+var tokensScroll = 0;
+var authorsScroll = 0;
 var scrollPosition = 0;
 function enableScroll(initialPosition = 0) {
   scrollPosition = initialPosition;

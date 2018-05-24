@@ -196,7 +196,8 @@ function tokensChart(tokenId) {
         $('body').removeClass('-invertedbg');
         $('.nav-bar').removeClass('-negative');
         setNavigationName(data.token);
-
+        authorsScroll = scrollPosition;
+        hammertime.destroy();
         authorsChart(tokenId, data.id);
       });
     })
@@ -276,8 +277,10 @@ loadData("/visualizations/tokens/", function(data) {
     $('.ball-animation').one('animationend', function(){
       currentPage.addClass('_hidden');
       setNavigationTitle(data.token);
+      $('.js-back').removeClass('_hidden');
     });
-    previousScroll = scrollPosition;
+    tokensScroll = scrollPosition;
+    hammertime.destroy();
     tokensChart(data.stem);
   });
   positionHexagon(hexagonGroup);
