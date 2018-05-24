@@ -1,6 +1,6 @@
 .hex-bg {
   position: relative;
-  z-index: -1;
+  z-index: map-get($z-index, hex-bg);
 
   display: flex;
   flex-wrap: wrap;
