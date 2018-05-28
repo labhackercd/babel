@@ -99,8 +99,9 @@ function createHexagonGroup(canvas, data) {
 
 function hexagonOnClick(hexagonGroup, callback) {
   hexagonGroup.on('click', function(d, i) {
-    zoomInAnimation(this);
-    callback(d);
+    // zoomInAnimation(this);
+    // callback(d);
+    console.log('Oi');
   })
 }
 
@@ -166,8 +167,8 @@ function updateCanvasSize(canvas) {
   var bbox = chart.getBBox();
 
   var svg = $(chart).closest('.js-svg-root');
-  svg.width(bbox.width);
-  svg.height(bbox.height * 1.001);
+  svg.width(Math.floor(bbox.width));
+  svg.height(Math.ceil(bbox.height));
 }
 
 function setTransformOrigin(canvas) {

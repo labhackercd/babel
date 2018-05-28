@@ -34,7 +34,7 @@ def tokens(request):
 
     tokens = models.Token.objects.all()
     final_dict = []
-    for i, stem in enumerate(bow.most_common(15)):
+    for i, stem in enumerate(bow.most_common(20)):
         token = tokens.get(stem=stem[0])
 
         obj = {}
