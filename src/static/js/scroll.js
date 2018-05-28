@@ -32,6 +32,6 @@ function enableScroll(initialPosition = 0) {
       scale = maxScale ** scrollRatio;
     }
 
-    $(svg).css('transform', `scale(${scale}) translateZ(0)`);
+    $(svg).css('transform', `scale(${scale})`);
   });
 }
