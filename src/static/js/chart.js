@@ -99,9 +99,8 @@ function createHexagonGroup(canvas, data) {
 
 function hexagonOnClick(hexagonGroup, callback) {
   hexagonGroup.on('click', function(d, i) {
-    // zoomInAnimation(this);
-    // callback(d);
-    console.log('Oi');
+    zoomInAnimation(this);
+    callback(d);
   })
 }
 
@@ -177,7 +176,7 @@ function setTransformOrigin(canvas) {
   var svgBBox = svgRoot[0].getBBox();
   var lastHexagon = $(chart).find('.js-hexagon-group').last()[0];
   var bbox = lastHexagon.getBBox();
-  svgRoot.css('transform-origin', `${bbox.x / svgBBox.width * 100}% 99.95%`);
+  svgRoot.css('transform-origin', `${Math.ceil(bbox.x / svgBBox.width * 100)}% 99.95%`);
 }
 
 
