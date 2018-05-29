@@ -26,11 +26,10 @@ def get_date_filter(field_name, request):
 
 
 def tokens(request):
-    date_filter = get_date_filter('manifestation', request)
-    man_tokens = models.ManifestationToken.objects.filter(date_filter)
+    analyses = models.Analysis.objects.all()
     bow = Counter()
-    for mt in man_tokens:
-        bow.update({mt.token.stem: mt.occurrences})
+    for analysis in analyses:
+        bow.update(analysis.data)
 
     tokens = models.Token.objects.all()
     final_dict = []
