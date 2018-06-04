@@ -28,10 +28,43 @@ class Command(BaseCommand):
             end_date = datetime.datetime(date.year, date.month, days)
 
             self.token_analysis(man_tokens, start_date, end_date)
+            self.author_analysis(man_tokens, start_date, end_date)
 
     def get_time_filter(self, start_date, end_date):
         return Q(manifestation__timestamp__gte=start_date,
                  manifestation__timestamp__lte=end_date)
+
+    @transaction.atomic
+    def author_analysis(self, queryset, start_date, end_date):
+        tokens = nlp_models.Token.objects.all()
+        secho('Processing author analysis from ', nl=False)
+        secho('{} to {}'.format(start_date, end_date), bold=True)
+
+        with progressbar(tokens) as bar:
+            for token in bar:
+                query_filter = self.get_time_filter(start_date, end_date)
+                for man_type in core_models.ManifestationType.objects.all():
+                    man_tokens = queryset.filter(
+                        query_filter &
+                        Q(token__stem=token.stem) &
+                        Q(manifestation__manifestation_type=man_type)
+                    )
+                    bow = Counter()
+                    for mt in man_tokens:
+                        bow.update({
+                            mt.manifestation.profile.id: mt.occurrences
+                        })
+
+                    if len(bow) > 0:
+                        analysis = nlp_models.Analysis.objects.get_or_create(
+                            manifestation_type=man_type,
+                            start_date=start_date,
+                            end_date=end_date,
+                            stem=token.stem,
+                            analysis_type=nlp_models.Analysis.AUTHOR,
+                        )[0]
+                        analysis.data = bow
+                        analysis.save()
 
     @transaction.atomic
     def token_analysis(self, queryset, start_date, end_date):

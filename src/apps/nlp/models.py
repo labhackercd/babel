@@ -69,8 +69,6 @@ class Analysis(models.Model):
     class Meta:
         verbose_name = "Token Analysis"
         verbose_name_plural = "Token Analysiss"
-        unique_together = ('start_date', 'end_date', 'analysis_type',
-                           'manifestation_type')
 
     def __str__(self):
         return '{}: {} - {}'.format(self.analysis_type, self.start_date,
