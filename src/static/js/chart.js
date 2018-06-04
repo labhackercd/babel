@@ -211,10 +211,10 @@ function tokensChart(tokenId) {
 function authorsChart(tokenId, authorId) {
   loadData(`/visualizations/authors/${tokenId}/${authorId}/`, function(data) {
     var speechesPage = $(document.createElement('div'))
-    speechesPage.addClass('speeches js-page page-content');
+    speechesPage.addClass('speeches js-page');
     addPage(speechesPage);
 
-    var hexGrid = $("<div class='hex-grid'>");
+    var hexGrid = $("<div class='hex-grid page-content'>");
     data.forEach(function(element, index) {
       var hex = $(`<div class="hex js-manifestation" data-manifestation-id=${element.id}>`);
 

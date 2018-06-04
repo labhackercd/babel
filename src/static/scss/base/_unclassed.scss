@@ -69,4 +69,9 @@ input {
 
 .speeches {
   min-height: 80vh;
+  overflow: auto;
+}
+
+.back._hidden {
+  display: none;
 }

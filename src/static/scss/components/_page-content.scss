@@ -1,6 +1,6 @@
-Unstaged changes after reset:
-M	src/static/js/chart.js
-M	src/static/scss/app.scss
-M	src/static/scss/base/_unclassed.scss
-M	src/static/scss/components/_page-content.scss
-D	src/static/scss/components/_svg-wrapper.scss
+.page-content {
+  display: flex;
+  justify-content: center;
+
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, black 45px, black calc(100% - 45px), rgba(0, 0, 0, 0) 100%);
+}
