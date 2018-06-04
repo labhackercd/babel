@@ -24,7 +24,7 @@ body {
     background-color: #FFF;
   }
 
-  &.-invertedbg .svg-wrapper.-active svg path {
+  &.-invertedbg .page-content.-active svg path {
     fill: $color-purple;
   }
 
@@ -65,4 +65,8 @@ input {
 
   color: #FFF;
   background-color: $color-purple;
+}
+
+.speeches {
+  min-height: 80vh;
 }

@@ -67,7 +67,7 @@ function drawCanvas(selector, chartName) {
     .append("div")
     .classed('js-page', true)
     .classed('-active', true)
-    .classed("svg-wrapper", true)
+    .classed("page-content", true)
       .append("svg")
       .classed("js-svg-root", true)
       .attr("data-chart-name", chartName)
@@ -211,7 +211,7 @@ function tokensChart(tokenId) {
 function authorsChart(tokenId, authorId) {
   loadData(`/visualizations/authors/${tokenId}/${authorId}`, function(data) {
     var speechesPage = $(document.createElement('div'))
-    speechesPage.addClass('speeches js-page');
+    speechesPage.addClass('speeches js-page page-content');
     addPage(speechesPage);
 
     var hexGrid = $("<div class='hex-grid'>");
