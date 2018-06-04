@@ -197,8 +197,8 @@ function tokensChart(tokenId) {
         $('.nav-bar').removeClass('-negative');
         setNavigationName(data.token);
         authorsScroll = scrollPosition;
-        hammertime.destroy();
         authorsChart(tokenId, data.id);
+        hammertime.destroy();
       });
     })
     updateCanvasSize(canvas);
@@ -209,7 +209,7 @@ function tokensChart(tokenId) {
 }
 
 function authorsChart(tokenId, authorId) {
-  loadData(`/visualizations/authors/${tokenId}/${authorId}`, function(data) {
+  loadData(`/visualizations/authors/${tokenId}/${authorId}/`, function(data) {
     var speechesPage = $(document.createElement('div'))
     speechesPage.addClass('speeches js-page page-content');
     addPage(speechesPage);

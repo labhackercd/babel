@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from apps.nlp import models
+from apps.core import models as core_models
 from apps.core.models import Manifestation
 from datetime import datetime
 from collections import Counter
@@ -26,11 +27,12 @@ def get_date_filter(field_name, request):
 
 
 def tokens(request):
-    date_filter = get_date_filter('manifestation', request)
-    man_tokens = models.ManifestationToken.objects.filter(date_filter)
+    analyses = models.Analysis.objects.filter(
+        analysis_type=models.Analysis.TOKEN
+    )
     bow = Counter()
-    for mt in man_tokens:
-        bow.update({mt.token.stem: mt.occurrences})
+    for analysis in analyses:
+        bow.update(analysis.data)
 
     tokens = models.Token.objects.all()
     final_dict = []
@@ -53,16 +55,18 @@ def tokens(request):
 
 
 def token_authors(request, token):
-    date_filter = get_date_filter('manifestation', request)
-    token_filter = Q(token__stem=token) & date_filter
-    man_tokens = models.ManifestationToken.objects.filter(token_filter)
+    analyses = models.Analysis.objects.filter(
+        analysis_type=models.Analysis.AUTHOR,
+        stem=token
+    )
     bow = Counter()
-    for mt in man_tokens:
-        bow.update({mt.manifestation.profile: mt.occurrences})
+    for analysis in analyses:
+        bow.update(analysis.data)
 
+    profiles = core_models.Profile.objects.all()
     final_dict = []
     for i, profile in enumerate(bow.most_common(15)):
-        profile = profile[0]
+        profile = profiles.get(id=profile[0])
         obj = {
             'token': profile.author.name,
             'id': profile.id,

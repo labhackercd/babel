@@ -44,3 +44,43 @@ class ManifestationToken(models.Model):
 
     def __str__(self):
         return '{} in {}'.format(self.token.stem, self.manifestation.__str__())
+
+
+class Analysis(models.Model):
+    TOKEN = 'token'
+    AUTHOR = 'author'
+    MANIFESTATION = 'manifestation'
+    ANALYSIS_TYPE_CHOICES = (
+        (TOKEN, 'Token'),
+        (AUTHOR, 'Author'),
+        (MANIFESTATION, 'Manifestation'),
+    )
+
+    manifestation_type = models.ForeignKey('core.ManifestationType',
+                                           on_delete=models.CASCADE)
+    analysis_type = models.CharField(max_length=13,
+                                     choices=ANALYSIS_TYPE_CHOICES)
+    stem = models.CharField(max_length=50, null=True, blank=True)
+    profile_id = models.IntegerField(null=True, blank=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    _data = models.TextField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Token Analysis"
+        verbose_name_plural = "Token Analysiss"
+
+    def __str__(self):
+        return '{}: {} - {}'.format(self.analysis_type, self.start_date,
+                                    self.end_date)
+
+    @property
+    def data(self):
+        if self._data:
+            return Counter(json.loads(self._data))
+        else:
+            return []
+
+    @data.setter
+    def data(self, value):
+        self._data = json.dumps(value)
