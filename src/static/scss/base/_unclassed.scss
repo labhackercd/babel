@@ -70,6 +70,7 @@ input {
 .speeches {
   min-height: 80vh;
   overflow: auto;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, black 45px, black calc(100% - 45px), rgba(0, 0, 0, 0) 100%);
 }
 
 .back._hidden {
