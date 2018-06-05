@@ -5,25 +5,31 @@
   flex-wrap: wrap;
 
   & > .hex:nth-child(odd) {
-    margin-left: -100px;
+    margin-left: -150px;
   }
 
   & > .hex:nth-child(even) {
-    margin-right: -100px;
+    margin-right: -150px;
   }
 
   & > .hex {
     display: flex;
+    overflow: hidden;
     flex-wrap: wrap;
 
-    width: 140px;
-    height: 140px;
+    width: 100px;
+    height: 100px;
+    margin-top: -40px;
     padding: 30px;
 
     cursor: pointer;
 
     border-radius: 50%;
     background-color: #FFF;
+  }
+
+  & > .hex:first-child {
+    margin-top: 0;
   }
 
   & > .hex * {
@@ -45,8 +51,8 @@
   }
 
   & > .hex > .header > .icon {
-    width: 36px;
-    height: 30px;
+    width: 27px;
+    height: 27px;
     margin-right: 10px;
 
     background-image: url('../img/megaphone.svg');
@@ -55,11 +61,13 @@
   }
 
   & > .hex > .header > .content > span {
+    font-size: 12px;
+
     display: block;
   }
 
   & > .hex > p {
-    font-size: 12px;
+    font-size: 11px;
 
     margin-top: 4px;
   }
