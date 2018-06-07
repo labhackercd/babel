@@ -25,7 +25,7 @@ jsonfield = "*"
 click = "*"
 django-celery-beat = {git = "https://github.com/celery/django-celery-beat.git", ref = "master"}
 redis = "*"
-celery = {extras = ["redis"]}
+celery = {version = "==4.2.0rc4", extras = ["redis"]}
 django-celery-results = "*"
 
 [requires]

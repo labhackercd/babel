@@ -232,7 +232,7 @@ def collect_post_save(sender, instance, created, **kwargs):
         interval=schedule,
         name='Get %s data' % (instance.channel.name),
         task='apps.core.tasks.get_channel_data',
-        kwargs=json.dumps({'channel_id': instance.id}),
+        kwargs=json.dumps({'channel_id': instance.channel.id}),
         start_time=instance.initial_time,
         last_run_at=instance.end_time,
     )
