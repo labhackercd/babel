@@ -35,7 +35,7 @@ def default_stopwords():
                   'grande', 'dia', 'disse', 'pode', 'nesta', 'vamos', 'vai',
                   'vez', 'sras', 'dizer', 'falar', 'dar', 'chegou', 'mostrar',
                   'desses', 'coloca', 'deixou', '%', 'coisa', 'acharam',
-                  'ficar', 'v.exa.', 'conclusao', ')', '(']
+                  'ficar', 'v.exa.', 'conclusao', ')', '(', '...', '..', '#']
 
     valid_tags = ['adj', 'n', 'prop', 'nprop', 'est', 'npro', 'v-fin', 'v-inf',
                   'v-ger', 'v-pcp', 'vaux', 'v', 'vp', 'pcp', 'num']

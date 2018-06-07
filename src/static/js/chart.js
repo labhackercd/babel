@@ -1,11 +1,36 @@
 var visiblePage = undefined;
+
+function getUrlParameters() {
+  searchParams = new URLSearchParams(window.location.search);
+  var initialDate = searchParams.get('initialDate');
+  var endDate = searchParams.get('endDate');
+  var manifestationType = searchParams.get('manifestationType');
+  var urlParameters = {};
+
+  if (initialDate) {
+    initialDate = initialDate.split('-');
+    initialDate = new Date(initialDate[0], initialDate[1], 1);
+    urlParameters['initial_date'] = initialDate.toISOString().split('T')[0];
+  }
+
+  if (endDate) {
+    endDate = endDate.split('-');
+    endDate = new Date(endDate[0], endDate[1], 0);
+    urlParameters['final_date'] = endDate.toISOString().split('T')[0];
+  }
+
+  if (manifestationType) {
+    urlParameters['manifestation_type'] = manifestationType;
+  }
+  return $.param(urlParameters);
+}
+
 function loadData(url, callback) {
   var newArray = [];
 
   $.ajax({
     type: "GET",
-    url: url,
-    data: "json",
+    url: url + '?' + getUrlParameters(),
     beforeSend: function() {
       $('.hex-loading').addClass('-visible');
     },
