@@ -65,16 +65,26 @@ def tokenize(text):
     return nltk.tokenize.word_tokenize(text, language='portuguese')
 
 
+def clear_tokens(tokens, stopwords):
+    stem_reference = {}
+    cleared_tokens = [
+        stemmize(token, stem_reference=stem_reference)
+        for token in tokens
+        if stemmize(token) not in stopwords
+    ]
+    return cleared_tokens, stem_reference
+
+
 @lru_cache()
-def bow(text, method='frequency'):
+def bow(text, method='frequency', ngrams=1):
     text = remove_numeric_characters(text)
     tokens = tokenize(text)
     stopwords = stemmize_stopwords()
-    stem_reference = {}
+    tokens, stem_reference = clear_tokens(tokenize(text), stopwords)
 
     text_bow = Counter([
-        stemmize(token) for token in tokens
-        if stemmize(token, stem_reference=stem_reference) not in stopwords
+        ' '.join(token)
+        for token in nltk.ngrams(tokens, ngrams)
     ])
     return text_bow, stem_reference
 

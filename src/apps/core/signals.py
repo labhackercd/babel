@@ -37,3 +37,23 @@ def process_manifestation(sender, instance, created, **kwargs):
             mt.frequency = occurrences / max_value
             mt.save()
             print(mt)
+
+    bigram_bow, stem_reference = pre_processing.bow(instance.content, ngrams=2)
+    if len(bigram_bow) > 0:
+        max_value = max(bigram_bow.values())
+        for token, occurrences in bigram_bow.items():
+            token = models.Token.objects.get_or_create(stem=token)[0]
+            t1, t2 = token.stem.split()
+            token.add_original_word(' '.join([
+                stem_reference[t1].most_common(1)[0][0],
+                stem_reference[t2].most_common(1)[0][0]
+            ]))
+            token.bigram = True
+            token.save()
+            mt = models.ManifestationToken()
+            mt.manifestation = instance
+            mt.token = token
+            mt.occurrences = occurrences
+            mt.frequency = occurrences / max_value
+            mt.save()
+            print(mt)

@@ -5,6 +5,7 @@ import json
 
 class Token(models.Model):
     stem = models.CharField(max_length=255, unique=True)
+    bigram = models.BooleanField(default=False)
     _originals = models.TextField(default="{}")
 
     class Meta:
