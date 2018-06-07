@@ -228,28 +228,13 @@ def collect_post_save(sender, instance, created, **kwargs):
         every=instance.periodicity,
         period=IntervalSchedule.SECONDS,
     )
-    periodic_task = PeriodicTask.objects.create(
+    PeriodicTask.objects.create(
         interval=schedule,
         name='Get %s data' % (instance.channel.name),
         task='apps.core.tasks.get_channel_data',
         kwargs=json.dumps({'channel_id': instance.id}),
-        # start_time=instance.initial_time,   ## available in next version
+        start_time=instance.initial_time,
         last_run_at=instance.end_time,
-        enabled=False
-    )
-    crontab_schedule, crontab_created = CrontabSchedule.objects.get_or_create(
-        minute=instance.initial_time.minute,
-        hour=instance.initial_time.hour,
-        day_of_month=instance.initial_time.day,
-        month_of_year=instance.initial_time.month,
-    )
-    PeriodicTask.objects.create(
-        crontab=crontab_schedule,
-        name='Start crawl %s at' % (instance.channel.name),
-        task='apps.core.tasks.start_periodic_task',
-        kwargs=json.dumps({
-            'periodic_id': periodic_task.id,
-        })
     )
 
 
