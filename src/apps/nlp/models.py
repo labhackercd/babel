@@ -57,11 +57,19 @@ class Analysis(models.Model):
         (MANIFESTATION, 'Manifestation'),
     )
 
+    UNIGRAM_BOW = 'unigram_bow'
+    BIGRAM_BOW = 'bigram_bow'
+    ALGORITHM_CHOICES = (
+        (UNIGRAM_BOW, 'Unigram Bag of Words'),
+        (BIGRAM_BOW, 'Bigram Bag of Words'),
+    )
+
     manifestation_type = models.ForeignKey('core.ManifestationType',
                                            on_delete=models.CASCADE)
     analysis_type = models.CharField(max_length=13,
                                      choices=ANALYSIS_TYPE_CHOICES)
-    stem = models.CharField(max_length=50, null=True, blank=True)
+    algorithm = models.CharField(max_length=100, choices=ALGORITHM_CHOICES)
+    stem = models.CharField(max_length=255, null=True, blank=True)
     profile_id = models.IntegerField(null=True, blank=True)
     start_date = models.DateField()
     end_date = models.DateField()
