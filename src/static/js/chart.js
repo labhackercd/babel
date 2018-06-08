@@ -241,6 +241,7 @@ function authorsChart(tokenId, authorId) {
 
     var hexGrid = $("<div class='hex-grid page-content'>");
     data.forEach(function(element, index) {
+      var hexWrapper = $(`<div class="hex-wrapper">`);
       var hex = $(`<div class="hex js-manifestation" data-manifestation-id=${element.id}>`);
 
       var header = $('<div class="header">');
@@ -252,9 +253,10 @@ function authorsChart(tokenId, authorId) {
 
       header.append(headerContent);
 
+      hexWrapper.append(hex);
       hex.append(header);
       hex.append($(`<p>${element.preview}</p>`));
-      hexGrid.append(hex);
+      hexGrid.append(hexWrapper);
     })
 
     speechesPage.append(hexGrid);

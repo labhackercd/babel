@@ -1,25 +1,38 @@
 .hex-grid {
   display: flex;
   align-items: center;
-  flex-direction: column;
   flex-wrap: wrap;
 
-  & > .hex:nth-child(odd) {
-    margin-left: -150px;
+  // & > .hex-wrapper > .hex:nth-child(odd) {
+  //   margin-left: -150px;
+  // }
+  //
+  // & > .hex-wrapper > .hex:nth-child(even) {
+  //   margin-right: -150px;
+  // }
+
+  // & > .hex-wrapper > .hex:nth-child(2n+1) {
+  //   margin-right: -150px;
+  // }
+
+  & > .hex-wrapper:nth-child(3n+1) {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: center;
   }
 
-  & > .hex:nth-child(even) {
-    margin-right: -150px;
+  & > .hex-wrapper {
+    padding: 0 5px;
+    margin-bottom: -10px;
   }
 
-  & > .hex {
+  & > .hex-wrapper > .hex {
     display: flex;
     overflow: hidden;
     flex-wrap: wrap;
 
     width: 100px;
     height: 100px;
-    margin-top: -40px;
     padding: 30px;
 
     cursor: pointer;
@@ -28,15 +41,11 @@
     background-color: #FFF;
   }
 
-  & > .hex:first-child {
-    margin-top: 0;
-  }
-
-  & > .hex * {
+  & > .hex-wrapper > .hex * {
     color: #000;
   }
 
-  & > .hex > .header {
+  & > .hex-wrapper > .hex > .header {
     font-size: 14px;
     font-weight: bold;
 
@@ -44,13 +53,13 @@
     align-items: center;
   }
 
-  & > .hex > .header > .info {
+  & > .hex-wrapper > .hex > .header > .info {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
   }
 
-  & > .hex > .header > .icon {
+  & > .hex-wrapper > .hex > .header > .icon {
     width: 27px;
     height: 27px;
     margin-right: 10px;
@@ -60,13 +69,13 @@
     background-size: contain;
   }
 
-  & > .hex > .header > .content > span {
+  & > .hex-wrapper > .hex > .header > .content > span {
     font-size: 12px;
 
     display: block;
   }
 
-  & > .hex > p {
+  & > .hex-wrapper > .hex > p {
     font-size: 11px;
 
     margin-top: 4px;
