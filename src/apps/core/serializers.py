@@ -196,7 +196,7 @@ class ManifestationSerializer(serializers.HyperlinkedModelSerializer):
     )
     collect_id = serializers.PrimaryKeyRelatedField(
         queryset=models.Collect.objects.all(),
-        write_only=True, source='collect')
+        write_only=True, source='collect', required=False)
     attrs = ManifestationAttributeSerializer(many=True)
 
     class Meta:
@@ -229,7 +229,6 @@ class ManifestationSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         attrs_data = validated_data.pop('attrs')
-        collect = validated_data.pop('collect')
         domain_attrs = models.ManifestationDomainAttribute.objects.filter(
             manifestation_type=validated_data['manifestation_type'])
         if validate_attrs(domain_attrs, attrs_data):
@@ -250,8 +249,10 @@ class ManifestationSerializer(serializers.HyperlinkedModelSerializer):
                     defaults={
                         'value': attr['value'],
                     },)
-            models.CollectManifestation.objects.create(
-                manifestation=manifestation, collect=collect)
+            if 'collect' in validated_data:
+                collect = validated_data.pop('collect')
+                models.CollectManifestation.objects.create(
+                    manifestation=manifestation, collect=collect)
             return manifestation
 
 

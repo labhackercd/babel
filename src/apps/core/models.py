@@ -163,7 +163,8 @@ class Manifestation(models.Model):
     url = models.TextField(null=True, blank=True)
     profile = models.ForeignKey(Profile, related_name='manifestations',
                                 on_delete=models.CASCADE)
-    collect = models.ManyToManyField(Collect, through='CollectManifestation')
+    collect = models.ManyToManyField(Collect, through='CollectManifestation',
+                                     null=True, blank=True)
 
     class Meta:
         verbose_name = _('manifestation')
