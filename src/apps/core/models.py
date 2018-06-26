@@ -138,7 +138,11 @@ class Profile(models.Model):
         verbose_name_plural = _('profiles')
 
     def __str__(self):
-        return '%s <%s>' % (self.author.name, self.channel.name)
+        if self.author:
+            profile_name = '%s <%s>' % (self.author.name, self.channel.name)
+        else:
+            profile_name = '%s <%s>' % (self.id_in_channel, self.channel.name)
+        return profile_name
 
 
 class ProfileAttribute(model_mixings.AttributeMixing):

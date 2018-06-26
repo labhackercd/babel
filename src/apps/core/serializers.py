@@ -122,7 +122,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     )
     author_id = serializers.PrimaryKeyRelatedField(
         queryset=models.Author.objects.all(),
-        write_only=True, source='author')
+        write_only=True, source='author', required=False)
     channel = serializers.HyperlinkedRelatedField(
         read_only=True,
         view_name='channel-detail'
