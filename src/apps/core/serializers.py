@@ -142,10 +142,22 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         domain_attrs = models.ProfileDomainAttribute.objects.filter(
             channel=validated_data['channel'])
         if validate_attrs(domain_attrs, attrs_data):
-            profile = models.Profile.objects.create(**validated_data)
-            for attr in attrs_data:
-                models.ProfileAttribute.objects.create(
-                    profile=profile, **attr)
+            channel = validated_data.pop('channel')
+            id_in_channel = validated_data.pop('id_in_channel')
+            profile, created = models.Profile.objects.update_or_create(
+                channel=channel, id_in_channel=id_in_channel,
+                defaults=validated_data)
+            for attr_data in attrs_data:
+                if created:
+                    models.ProfileAttribute.objects.create(
+                        profile=profile, **attr_data)
+                else:
+                    attr = models.ProfileAttribute.objects.get_or_create(
+                        profile=profile,
+                        field=attr_data['field']
+                    )[0]
+                    attr.value = attr_data['value']
+                    attr.save()
             return profile
 
     def update(self, instance, validated_data):
