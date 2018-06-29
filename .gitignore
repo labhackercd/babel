@@ -1,5 +1,6 @@
 */public/
 *.sqlite3
+*.ini
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -102,3 +103,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+node_modules/
+
+.DS_Store

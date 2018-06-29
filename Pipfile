@@ -1,21 +1,19 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [dev-packages]
-
 ipdb = "*"
 
-
 [packages]
-
-django = "*"
+Django = "*"
 python-decouple = "*"
-
+"psycopg2" = "*"
+djangorestframework = "==3.7.7"
+django-filter = "*"
+django-nested-admin = "*"
+gunicorn = "*"
 
 [requires]
-
 python_version = "3.6"
