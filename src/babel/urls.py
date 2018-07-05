@@ -2,6 +2,7 @@ from django.urls import path, include
 from django.contrib import admin
 from rest_framework.authtoken import views
 from apps.core.router import BabelRouter
+from django.views.generic import TemplateView
 from apps.core.api import (ChannelViewSet, CollectViewSet, AuthorViewSet,
                            ProfileViewSet, ManifestationViewSet,
                            ManifestationTypeViewSet,
@@ -23,6 +24,7 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('nested_admin/', include('nested_admin.urls')),
     path('api-token-auth/', views.obtain_auth_token),
+    path('', TemplateView.as_view(template_name='base.html')),
 ]
 
 admin.site.site_header = 'Babel'
