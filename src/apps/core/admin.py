@@ -76,7 +76,8 @@ class ProfileAttributeInline(nested_admin.NestedStackedInline):
 
 
 class ProfileAdmin(nested_admin.NestedModelAdmin):
-    list_display = ('author', 'id_in_channel', 'url', 'channel', 'is_reference')
+    list_display = ('author', 'id_in_channel', 'url', 'channel', 'is_reference',
+                    'created')
     list_filter = ('author__gender', 'channel__name', 'is_reference',
                    'author__name')
     search_fields = ('id_in_channel', 'url', 'channel__name', 'author__name')
@@ -93,13 +94,14 @@ class ManifestationAttributeInline(nested_admin.NestedStackedInline):
 
 
 class ManifestationAdmin(nested_admin.NestedModelAdmin):
-    list_display = ('short_content', 'manifestation_type', 'version', 'profile')
+    list_display = ('short_content', 'manifestation_type', 'version', 'profile',
+                    'created')
     list_filter = ('manifestation_type__channel__name',
                    'manifestation_type__name', 'profile__author',)
     search_fields = ('id_in_channel', 'url', 'timestamp', 'content',
                      'profile__author__name', 'manifestation_type__name',
                      'manifestation_type__channel__name')
-    ordering = ('timestamp',)
+    ordering = ('timestamp', 'created', 'modified')
     inlines = [
         ManifestationAttributeInline,
     ]
@@ -107,7 +109,7 @@ class ManifestationAdmin(nested_admin.NestedModelAdmin):
 
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('name', 'profiles', 'author_type', 'gender', 'birthdate',
-                    'cep')
+                    'cep', 'created')
     list_filter = ('gender', 'birthdate', 'author_type')
     search_fields = ('name', 'author_type', 'gender', 'cep')
     ordering = ('name',)

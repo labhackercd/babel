@@ -1,5 +1,23 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
+
+
+class TimestampedMixin(models.Model):
+    created = models.DateTimeField(_('created'), editable=False,
+                                   blank=True, auto_now_add=True)
+    modified = models.DateTimeField(_('modified'), editable=False,
+                                    blank=True, auto_now=True)
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(TimestampedMixin, self).save(*args, **kwargs)
 
 
 class AttributeMixing(models.Model):

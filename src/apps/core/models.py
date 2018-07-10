@@ -109,7 +109,7 @@ class CollectAttribute(model_mixings.AttributeMixing):
         verbose_name_plural = _('collect attributes')
 
 
-class Author(models.Model):
+class Author(model_mixings.TimestampedMixin):
     name = models.CharField(max_length=200, null=True, blank=True)
     author_type = models.CharField(max_length=200, null=True, blank=True)
     gender = models.CharField(max_length=200, null=True, blank=True)
@@ -124,7 +124,7 @@ class Author(models.Model):
         return self.name
 
 
-class Profile(models.Model):
+class Profile(model_mixings.TimestampedMixin):
     id_in_channel = models.CharField(max_length=200)
     url = models.TextField(null=True, blank=True)
     author = models.ForeignKey(Author, related_name='profiles', null=True,
@@ -154,7 +154,7 @@ class ProfileAttribute(model_mixings.AttributeMixing):
         verbose_name_plural = _('profile attributes')
 
 
-class Manifestation(models.Model):
+class Manifestation(model_mixings.TimestampedMixin):
     manifestation_type = models.ForeignKey(
         ManifestationType,
         related_name='manifestations',
