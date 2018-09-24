@@ -166,6 +166,11 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
             channel=validated_data['channel'])
 
         for field in instance._meta.fields:
+            if field.name in ['created', 'modified']:
+                continue
+            elif field.name == 'author':
+                setattr(instance, field.name, validated_data.get(field.name, None))
+                continue
             if not field.primary_key:
                 setattr(instance, field.name, validated_data[field.name])
 
